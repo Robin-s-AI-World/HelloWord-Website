@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<!-- Copyright (C) 2025-2026 Robin L. M. Cheung, MBA. All rights reserved. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello, Word — The SanctissiMissa Project</title>
+    <meta name="description" content="SanctissiMissa: Engineering a Digital Companion for the 1962 Extraordinary Form. Traditional Latin Mass application with complete Mass propers, liturgical calendar, and bilingual Latin/English texts.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+    // Theme: prevent FOUC
+    (function(){
+        var t = localStorage.getItem('sm_theme');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+        else document.documentElement.setAttribute('data-theme','light');
+    })();
+    </script>
+    <style>
+        :root {
+            --bg: #F5F0E8;
+            --bg-card: #FFFFFF;
+            --bg-card-alt: #FAF7F0;
+            --text: #2D2D2D;
+            --text-muted: #5A5A5A;
+            --text-light: #8A8A8A;
+            --gold: #B8860B;
+            --gold-bright: #D4AF37;
+            --gold-glow: rgba(212,175,55,0.15);
+            --crimson: #8B0000;
+            --crimson-light: #A52A2A;
+            --border: #D4C9B8;
+            --border-light: #E8DFD0;
+            --nav-bg: rgba(245,240,232,0.92);
+            --nav-border: rgba(212,175,55,0.3);
+            --code-bg: #1E1E2E;
+            --code-text: #CDD6F4;
+            --parchment-grad: radial-gradient(ellipse at 30% 20%, #FAF7F0 0%, #F5F0E8 50%, #EDE5D8 100%);
+            --shadow: 0 4px 24px rgba(45,45,45,0.08);
+            --shadow-lg: 0 12px 48px rgba(45,45,45,0.12);
+        }
+        [data-theme="dark"] {
+            --bg: #141414;
+            --bg-card: #1E1E1E;
+            --bg-card-alt: #252525;
+            --text: #E8E0D0;
+            --text-muted: #B0A890;
+            --text-light: #7A7060;
+            --gold: #D4AF37;
+            --gold-bright: #E8C84A;
+            --gold-glow: rgba(212,175,55,0.12);
+            --crimson: #CD5C5C;
+            --crimson-light: #E07070;
+            --border: #3A3530;
+            --border-light: #2E2A25;
+            --nav-bg: rgba(20,20,20,0.95);
+            --nav-border: rgba(212,175,55,0.2);
+            --code-bg: #0D0D14;
+            --code-text: #CDD6F4;
+            --parchment-grad: radial-gradient(ellipse at 30% 20%, #1E1E1E 0%, #141414 50%, #0F0F0F 100%);
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.4);
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--parchment-grad);
+            background-attachment: fixed;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.65;
+        }
+        h1, h2, h3, h4, .font-display { font-family: 'Cormorant Garamond', 'Georgia', serif; }
+
+        /* === NAV === */
+        .nav-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--nav-border);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .nav-bar.scrolled { box-shadow: var(--shadow); }
+        .nav-link {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        /* === ORNATE BORDER === */
+        .ornate {
+            position: relative;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+        .ornate::before, .ornate::after {
+            content: '';
+            position: absolute;
+            width: 24px; height: 24px;
+            border-color: var(--gold);
+            border-style: solid;
+        }
+        .ornate::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .ornate::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+        .ornate-lg::before, .ornate-lg::after { width: 40px; height: 40px; border-width: 3px; }
+        .ornate-lg::before { border-width: 3px 0 0 3px; }
+        .ornate-lg::after { border-width: 0 3px 3px 0; }
+
+        /* === CARDS === */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        /* === SECTIONS === */
+        .section { padding: 5rem 1.5rem; }
+        @media (min-width: 1024px) { .section { padding: 6rem 2rem; } }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 0.5rem;
+        }
+        @media (min-width: 768px) { .section-title { font-size: 3rem; } }
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 640px;
+            margin-bottom: 3rem;
+        }
+        .gold-accent { color: var(--gold); }
+        .crimson-accent { color: var(--crimson); }
+
+        /* === PILLAR === */
+        .pillar {
+            cursor: pointer;
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.25s;
+            background: var(--bg-card);
+        }
+        .pillar:hover, .pillar.active {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow);
+            transform: translateY(-4px);
+        }
+        .pillar .pillar-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .pillar .pillar-title { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1.1rem; color: var(--crimson); }
+
+        /* === TABS === */
+        .arch-tab {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: none;
+            border-top: none; border-left: none; border-right: none;
+        }
+        .arch-tab:hover, .arch-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+        .arch-tab-content { display: none; animation: fadeUp 0.3s ease; }
+        .arch-tab-content.active { display: block; }
+
+        /* === BLOG === */
+        .blog-card {
+            cursor: pointer;
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: var(--bg-card);
+            transition: all 0.25s;
+        }
+        .blog-card:hover { border-color: var(--gold); box-shadow: 0 8px 32px var(--gold-glow); }
+        .blog-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            background: var(--gold-glow);
+            color: var(--gold);
+        }
+        .blog-expanded { display: none; animation: fadeUp 0.4s ease; }
+        .blog-expanded.active { display: block; }
+
+        /* === LIGHTBOX === */
+        .lightbox-overlay {
+            position: fixed; inset: 0; z-index: 300;
+            background: rgba(0,0,0,0.92);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+        .lightbox-content {
+            position: relative; max-width: 90vw; max-height: 90vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lightbox-content video, .lightbox-content img {
+            max-width: 90vw; max-height: 85vh; border-radius: 0.5rem;
+            box-shadow: 0 8px 60px rgba(0,0,0,0.5);
+        }
+        .lightbox-content video { width: 80vw; max-width: 1100px; }
+        .lightbox-close {
+            position: absolute; top: -2.5rem; right: 0;
+            background: none; border: none; color: #fff; font-size: 2rem;
+            cursor: pointer; opacity: 0.7; transition: opacity 0.2s;
+            line-height: 1;
+        }
+        .lightbox-close:hover { opacity: 1; }
+        .lightbox-caption {
+            position: absolute; bottom: -2rem; left: 0; right: 0;
+            text-align: center; color: rgba(255,255,255,0.7);
+            font-size: 0.85rem; font-family: 'Inter', sans-serif;
+        }
+
+        /* === MEDIA GALLERY === */
+        .media-filter-btn {
+            font-size: 0.8rem; font-weight: 600; padding: 0.4rem 1rem;
+            border-radius: 999px; border: 1px solid var(--border);
+            background: var(--bg-card); color: var(--text-muted);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .media-filter-btn:hover, .media-filter-btn.active {
+            background: var(--gold); color: #fff; border-color: var(--gold);
+        }
+        .media-item { border: 1px solid var(--border-light); border-radius: 0.5rem; overflow: hidden; background: var(--bg-card); }
+
+        /* === TIER BADGES === */
+        .tier-mvp { background: #065F46; color: #D1FAE5; }
+        .tier-p2 { background: #92400E; color: #FEF3C7; }
+        .tier-p3 { background: #581C87; color: #F3E8FF; }
+
+        /* === DOWNLOAD CARDS === */
+        .dl-card {
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            transition: all 0.2s;
+        }
+        .dl-card:hover { border-color: var(--gold); box-shadow: 0 4px 16px var(--gold-glow); }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+
+        /* === CHART === */
+        .chart-container { position: relative; width: 100%; max-width: 800px; height: 300px; margin: 0 auto; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+
+        /* === CODE BLOCK === */
+        .code-block {
+            background: var(--code-bg); color: var(--code-text);
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.82rem; line-height: 1.7;
+            padding: 1.5rem; border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .code-block .endpoint { color: #89B4FA; }
+        .code-block .method { color: #A6E3A1; font-weight: 700; }
+        .code-block .comment { color: #6C7086; font-style: italic; }
+        .code-block .arrow { color: #D4AF37; }
+
+        /* === ACCORDION === */
+        .accordion-toggle { cursor: pointer; }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .accordion-body.open { max-height: 500px; }
+
+        /* === MOBILE MENU === */
+        .mobile-menu { display: none; }
+        .mobile-menu.open { display: block; }
+
+        /* === CMS EDIT MODE === */
+        [data-editable].editing {
+            outline: 2px dashed var(--gold);
+            outline-offset: 4px;
+            min-height: 1.5em;
+        }
+        .cms-toolbar {
+            position: fixed; bottom: 1rem; right: 1rem; z-index: 200;
+            background: var(--bg-card); border: 1px solid var(--gold);
+            border-radius: 0.5rem; padding: 0.75rem;
+            box-shadow: var(--shadow-lg); display: none;
+        }
+        .cms-toolbar.active { display: flex; gap: 0.5rem; align-items: center; }
+
+        /* === SCROLLBAR === */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .section-title { font-size: 2rem; }
+            .hero-title { font-size: 2.5rem !important; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- ==================== NAVIGATION ==================== -->
+<nav class="nav-bar" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+        <a href="#hero" class="font-display text-xl font-bold gold-accent" style="letter-spacing:0.02em;">SanctissiMissa</a>
+        <!-- Desktop Nav -->
+        <div class="hidden lg:flex items-center gap-6">
+            <a href="#overview" class="nav-link" data-nav="overview">Overview</a>
+            <a href="#features" class="nav-link" data-nav="features">Features</a>
+            <a href="#architecture" class="nav-link" data-nav="architecture">Architecture</a>
+            <a href="#roadmap" class="nav-link" data-nav="roadmap">Roadmap</a>
+            <a href="#blog" class="nav-link" data-nav="blog">Blog</a>
+            <a href="#media" class="nav-link" data-nav="media">Media</a>
+            <a href="#reading-list" class="nav-link" data-nav="reading-list">Reading List</a>
+            <a href="#downloads" class="nav-link" data-nav="downloads">Downloads</a>
+            <a href="#about" class="nav-link" data-nav="about">About</a>
+            <button id="themeToggle" class="ml-2 p-2 rounded-full hover:bg-[var(--gold-glow)] transition" title="Toggle theme" aria-label="Toggle theme">
+                <span id="themeIcon" style="font-size:1.2rem;">&#9790;</span>
+            </button>
+        </div>
+        <!-- Mobile Hamburger -->
+        <button id="hamburger" class="lg:hidden p-2" aria-label="Menu">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu lg:hidden px-4 pb-4">
+        <div class="flex flex-col gap-2">
+            <a href="#overview" class="nav-link block py-2" onclick="closeMobile()">Overview</a>
+            <a href="#features" class="nav-link block py-2" onclick="closeMobile()">Features</a>
+            <a href="#architecture" class="nav-link block py-2" onclick="closeMobile()">Architecture</a>
+            <a href="#roadmap" class="nav-link block py-2" onclick="closeMobile()">Roadmap</a>
+            <a href="#blog" class="nav-link block py-2" onclick="closeMobile()">Blog</a>
+            <a href="#media" class="nav-link block py-2" onclick="closeMobile()">Media</a>
+            <a href="#reading-list" class="nav-link block py-2" onclick="closeMobile()">Reading List</a>
+            <a href="#downloads" class="nav-link block py-2" onclick="closeMobile()">Downloads</a>
+            <a href="#about" class="nav-link block py-2" onclick="closeMobile()">About</a>
+            <button onclick="toggleTheme(); closeMobile();" class="nav-link block py-2 text-left">Toggle Theme</button>
+        </div>
+    </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden" style="padding-top:80px;">
+    <div class="absolute inset-0" style="background: var(--parchment-grad); z-index:0;"></div>
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
+        <p class="font-display italic text-lg sm:text-xl mb-4" style="color:var(--gold);">"In principio erat Verbum, et Verbum erat apud Deum."</p>
+        <h1 class="hero-title font-display font-bold leading-tight mb-4" style="font-size:3.5rem; color:var(--text);">
+            Hello, <span style="color:var(--crimson);">Word</span>
+        </h1>
+        <p class="text-lg sm:text-xl mb-2" style="color:var(--text-muted);">The SanctissiMissa Project</p>
+        <p class="text-sm sm:text-base mb-6" style="color:var(--text-light);">Engineering a Digital Companion for the 1962 Extraordinary Form</p>
+        <p class="text-sm mb-8" style="color:var(--text-muted);">
+            by <strong style="color:var(--text);">Robin L. M. Cheung, MBA</strong>
+            <span class="mx-2" style="color:var(--border);">|</span>
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">v0.1.0-alpha &middot; Build 66954</span>
+        </p>
+        <!-- Embedded App as Hero -->
+        <div style="position:relative; width:100%; max-width:420px; margin:0 auto; border-radius:2rem; overflow:hidden; box-shadow:0 12px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08); background:#0A0F1A;">
+            <div style="background:linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%); padding:10px 0 6px; text-align:center;">
+                <div style="width:36px; height:4px; border-radius:2px; background:rgba(255,255,255,0.15); margin:0 auto;"></div>
+            </div>
+            <iframe
+                src="http://192.168.0.126:18080"
+                style="width:100%; height:700px; border:none; display:block;"
+                title="SanctissiMissa Web App"
+                loading="eager"
+                allow="fullscreen"
+            ></iframe>
+            <div style="background:linear-gradient(0deg, #1a1a2e 0%, #0f0f1a 100%); padding:6px 0 10px; text-align:center;">
+                <div style="width:90px; height:4px; border-radius:2px; background:rgba(255,255,255,0.1); margin:0 auto;"></div>
+            </div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-3 mt-6 mb-4">
+            <a href="http://192.168.0.126:18080" target="_blank" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--gold); color:#fff;">Open Full Screen</a>
+            <a href="#downloads" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
+        </div>
+        <div class="mt-4">
+            <a href="#overview" class="inline-block" style="color:var(--gold); animation: bounce 2s infinite;">
+                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== OVERVIEW ==================== -->
+<section id="overview" class="section">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>Project Overview</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>A high-level summary of the project's vision, the problem it solves, and the audience it serves.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="card p-6 fade-in stagger-1">
+                <h3 class="font-display text-xl font-bold mb-3 gold-accent">Vision</h3>
+                <p class="text-sm" style="color:var(--text-muted);" data-editable>To be the definitive digital platform for the 1962 Extraordinary Form, bridging sacred tradition with modern technology to foster spiritual growth and liturgical understanding.</p>
+            </div>
+            <div class="card p-6 fade-in stagger-2">
+                <h3 class="font-display text-xl font-bold mb-3 gold-accent">Problem Statement</h3>
+                <p class="text-sm" style="color:var(--text-muted);" data-editable>Existing digital resources for the Tridentine Liturgy are fragmented, often costly, and lack modern offline-first features. SanctissiMissa provides a single, elegant, comprehensive solution.</p>
+            </div>
+            <div class="card p-6 fade-in stagger-3">
+                <h3 class="font-display text-xl font-bold mb-3 gold-accent">Target Audience</h3>
+                <ul class="text-sm space-y-1" style="color:var(--text-muted);">
+                    <li>&#8226; Laity devoted to the Extraordinary Form</li>
+                    <li>&#8226; Priests, seminarians, and religious</li>
+                    <li>&#8226; Scholars and students of liturgy</li>
+                    <li>&#8226; Altar servers and sacristans</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Hello World → Hello Word narrative -->
+        <div class="ornate ornate-lg p-6 md:p-10 fade-in" style="border-radius:0.5rem;">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="code-block" style="font-size:0.9rem;">
+                    <span class="comment">// Every programmer's first line:</span><br>
+                    console.log(<span style="color:#F38BA8;">"Hello, World"</span>);<br><br>
+                    <span class="comment">// But this project begins with:</span><br>
+                    console.log(<span style="color:#F38BA8;">"Hello, Word"</span>);<br><br>
+                    <span class="comment">// "In the beginning was the Word"</span><br>
+                    <span class="comment">// &mdash; John 1:1</span>
+                </div>
+                <div>
+                    <h3 class="font-display text-2xl font-bold mb-4 crimson-accent">From Hello, World to Hello, Word</h3>
+                    <p class="text-sm mb-4" style="color:var(--text-muted);" data-editable>Every programmer begins with "Hello, World." This project transforms that universal starting point into something sacred&mdash;"Hello, Word"&mdash;a reverent nod to the Prologue of St. John's Gospel: <em>"In principio erat Verbum."</em></p>
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">Hello, Word</span>
+                        <span style="color:var(--gold);">&rarr;</span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">SanctissiMissa</span>
+                        <span style="color:var(--gold);">&rarr;</span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">St. Android's Missal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FEATURES ==================== -->
+<section id="features" class="section" style="background:var(--bg-card-alt);">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>The Five Pillars</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>The foundational capabilities of SanctissiMissa, built like the pillars of a sacred portico. Click a pillar to explore.</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div class="pillar fade-in stagger-1" data-pillar="mass">
+                <div class="pillar-icon">&#9768;</div>
+                <div class="pillar-title">Mass Texts</div>
+                <p class="text-xs mt-1" style="color:var(--text-light);">Complete propers &amp; ordinary</p>
+            </div>
+            <div class="pillar fade-in stagger-2" data-pillar="calendar">
+                <div class="pillar-icon">&#128197;</div>
+                <div class="pillar-title">Liturgical Calendar</div>
+                <p class="text-xs mt-1" style="color:var(--text-light);">1962 rubrics engine</p>
+            </div>
+            <div class="pillar fade-in stagger-3" data-pillar="office">
+                <div class="pillar-icon">&#128214;</div>
+                <div class="pillar-title">Divine Office</div>
+                <p class="text-xs mt-1" style="color:var(--text-light);">Breviary &amp; hours</p>
+            </div>
+            <div class="pillar fade-in stagger-4" data-pillar="journal">
+                <div class="pillar-icon">&#9998;</div>
+                <div class="pillar-title">Personal Journal</div>
+                <p class="text-xs mt-1" style="color:var(--text-light);">Notes &amp; reflections</p>
+            </div>
+            <div class="pillar fade-in stagger-4" data-pillar="parish">
+                <div class="pillar-icon">&#9962;</div>
+                <div class="pillar-title">Parish Info</div>
+                <p class="text-xs mt-1" style="color:var(--text-light);">Community &amp; schedules</p>
+            </div>
+        </div>
+
+        <div id="pillarDetail" class="ornate p-6 fade-in" style="border-radius:0.5rem; min-height:160px;">
+            <div id="pillarContent">
+                <p style="color:var(--text-light); font-style:italic;">Select a pillar above to explore its features.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== ARCHITECTURE ==================== -->
+<section id="architecture" class="section">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>System Architecture</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>Under the hood: the technical foundation powering an offline-first liturgical companion.</p>
+
+        <div class="ornate p-4 sm:p-6 fade-in" style="border-radius:0.5rem;">
+            <div class="flex flex-wrap gap-1 border-b" style="border-color:var(--border);">
+                <button class="arch-tab active" data-arch="stack">Tech Stack</button>
+                <button class="arch-tab" data-arch="strat">Stratigraphy</button>
+                <button class="arch-tab" data-arch="api">API Ecosystem</button>
+                <button class="arch-tab" data-arch="deploy">Deployment</button>
+                <button class="arch-tab" data-arch="stone">Stone Churches</button>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="arch-tab-content active" id="arch-stack" style="padding-top:1.5rem;">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-4" style="background:var(--bg-card-alt); border-radius:0.5rem;">
+                        <h4 class="font-display font-bold gold-accent mb-2">Frontend</h4>
+                        <p class="text-sm" style="color:var(--text-muted);">React 19 + TypeScript<br>Vite build system<br>Tailwind CSS<br>React Native Web</p>
+                    </div>
+                    <div class="p-4" style="background:var(--bg-card-alt); border-radius:0.5rem;">
+                        <h4 class="font-display font-bold gold-accent mb-2">Native Shell</h4>
+                        <p class="text-sm" style="color:var(--text-muted);">Tauri 2 (Rust)<br>Android, Linux, Web<br>~48 MB APK<br>~290 KB JS bundle</p>
+                    </div>
+                    <div class="p-4" style="background:var(--bg-card-alt); border-radius:0.5rem;">
+                        <h4 class="font-display font-bold gold-accent mb-2">API Server</h4>
+                        <p class="text-sm" style="color:var(--text-muted);">Node.js + Express<br>Port 9837<br>better-sqlite3<br>FTS5 full-text search</p>
+                    </div>
+                    <div class="p-4" style="background:var(--bg-card-alt); border-radius:0.5rem;">
+                        <h4 class="font-display font-bold gold-accent mb-2">Database</h4>
+                        <p class="text-sm" style="color:var(--text-muted);">SQLite 27.4 MB<br>Bilingual corpus (la+en)<br>sql.js for web<br>Offline-first</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stratigraphy -->
+            <div class="arch-tab-content" id="arch-strat" style="padding-top:1.5rem;">
+                <div class="max-w-lg mx-auto space-y-0">
+                    <div class="p-4 text-center" style="background:#8B0000; color:#fff; border-radius:0.5rem 0.5rem 0 0;">
+                        <p class="font-display font-bold text-lg">Presentation Layer</p>
+                        <p class="text-xs opacity-80">React Components &middot; Tailwind &middot; Theme System</p>
+                    </div>
+                    <div class="p-4 text-center" style="background:#B8860B; color:#fff;">
+                        <p class="font-display font-bold text-lg">Bridge Layer</p>
+                        <p class="text-xs opacity-80">Platform Adapters &middot; sql.js / better-sqlite3</p>
+                    </div>
+                    <div class="p-4 text-center" style="background:#2D5016; color:#fff;">
+                        <p class="font-display font-bold text-lg">Engine Layer</p>
+                        <p class="text-xs opacity-80">Calendar Engine &middot; Corpus DB &middot; Cross-References</p>
+                    </div>
+                    <div class="p-4 text-center" style="background:#1E1E2E; color:#CDD6F4; border-radius:0 0 0.5rem 0.5rem;">
+                        <p class="font-display font-bold text-lg">Bedrock Layer</p>
+                        <p class="text-xs opacity-80">SQLite 27.4 MB &middot; DivinumOfficium Corpus (MIT) &middot; 1962 Rubrics</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Ecosystem -->
+            <div class="arch-tab-content" id="arch-api" style="padding-top:1.5rem;">
+                <div class="code-block">
+                    <span class="comment"># SanctissiMissa Liturgical API &mdash; Port 9837</span><br><br>
+                    <span class="method">GET</span> <span class="endpoint">/mass?date=2026-03-19&amp;rite=1962</span>   <span class="arrow">&rarr;</span> <span class="comment">Complete Mass propers (bilingual)</span><br>
+                    <span class="method">GET</span> <span class="endpoint">/day?date=2026-03-19&amp;rite=1962</span>    <span class="arrow">&rarr;</span> <span class="comment">Calendar day metadata + winner</span><br>
+                    <span class="method">GET</span> <span class="endpoint">/calendar/month?year=2026&amp;month=3</span> <span class="arrow">&rarr;</span> <span class="comment">Full month calendar grid</span><br>
+                    <span class="method">GET</span> <span class="endpoint">/ordo?year=2026</span>                       <span class="arrow">&rarr;</span> <span class="comment">Annual liturgical calendar</span><br>
+                    <span class="method">GET</span> <span class="endpoint">/search?q=resurrexit</span>                  <span class="arrow">&rarr;</span> <span class="comment">FTS5 full-text search</span><br>
+                </div>
+            </div>
+
+            <!-- Deployment Matrix -->
+            <div class="arch-tab-content" id="arch-deploy" style="padding-top:1.5rem;">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm" style="border-collapse:collapse;">
+                        <thead>
+                            <tr style="border-bottom:2px solid var(--gold);">
+                                <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Platform</th>
+                                <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Format</th>
+                                <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Database</th>
+                                <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Offline</th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:var(--text-muted);">
+                            <tr style="border-bottom:1px solid var(--border-light);">
+                                <td class="p-3 font-semibold">Web PWA</td><td class="p-3">Static + sql.js WASM</td><td class="p-3">27.4 MB fetched once</td><td class="p-3 gold-accent font-bold">Yes (after first load)</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--border-light);">
+                                <td class="p-3 font-semibold">Android</td><td class="p-3">Tauri 2 APK</td><td class="p-3">Bundled in assets/</td><td class="p-3 gold-accent font-bold">Fully offline</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold">Linux</td><td class="p-3">AppImage / DEB</td><td class="p-3">Bundled in resources/</td><td class="p-3 gold-accent font-bold">Fully offline</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Stone Churches -->
+            <div class="arch-tab-content" id="arch-stone" style="padding-top:1.5rem;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div>
+                        <h4 class="font-display text-xl font-bold crimson-accent mb-3">The "Stone Churches" Philosophy</h4>
+                        <p class="text-sm mb-3" style="color:var(--text-muted);" data-editable>A stone church doesn't need Wi-Fi to stand. SanctissiMissa follows the same principle: the complete liturgical corpus is <strong>bundled inside the app</strong> as a 27.4 MB SQLite database. No server dependency, no internet requirement, no subscription.</p>
+                        <p class="text-sm" style="color:var(--text-muted);" data-editable>On native platforms (Android, Linux), the database ships inside the binary. On the web, sql.js loads the database into WebAssembly memory after a single download. Either way, the Mass texts are always available&mdash;even in the catacombs.</p>
+                    </div>
+                    <div class="ornate p-4" style="border-radius:0.5rem;">
+                        <p class="text-center font-display font-bold mb-3" style="color:var(--gold);">Offline Architecture</p>
+                        <div class="space-y-2 text-sm text-center">
+                            <div class="p-2 rounded" style="background:var(--gold-glow);">App Binary (Tauri 2 / Vite)</div>
+                            <div style="color:var(--gold);">&darr; bundles &darr;</div>
+                            <div class="p-2 rounded" style="background:var(--gold-glow);">liturgical.db (27.4 MB SQLite)</div>
+                            <div style="color:var(--gold);">&darr; contains &darr;</div>
+                            <div class="p-2 rounded" style="background:var(--gold-glow);">Complete Bilingual Corpus (la + en)</div>
+                            <div style="color:var(--gold);">&darr; powers &darr;</div>
+                            <div class="p-2 rounded" style="background:var(--gold-glow);">Mass &middot; Calendar &middot; Search &middot; FTS5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== ROADMAP ==================== -->
+<section id="roadmap" class="section" style="background:var(--bg-card-alt);">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>Implementation Roadmap</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>A phased approach from MVP to a polished, feature-rich liturgical companion. Click a phase for details.</p>
+
+        <div class="ornate p-6 fade-in" style="border-radius:0.5rem;">
+            <div class="chart-container">
+                <canvas id="roadmapChart"></canvas>
+            </div>
+            <div id="roadmapDetails" class="mt-6" style="min-height:100px;"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== BLOG ==================== -->
+<section id="blog" class="section">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>Blog &amp; Articles</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>Deep dives into the engineering, architecture, and philosophy behind SanctissiMissa.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blogGrid">
+            <!-- Article 1 -->
+            <div class="blog-card fade-in stagger-1" data-blog="sacred-app">
+                <div class="p-1" style="background:var(--crimson); height:4px;"></div>
+                <div class="p-5">
+                    <span class="blog-tag">Vision</span>
+                    <span class="ml-1 text-xs" style="color:var(--text-light);">&#9654; Video</span>
+                    <h3 class="font-display text-xl font-bold mt-3 mb-2" style="color:var(--text);">Hello, Word: A Sacred App</h3>
+                    <p class="text-sm" style="color:var(--text-muted);">The origin story: how a programmer's "Hello, World" became a reverent "Hello, Word" &mdash; and the vision for a digital companion to the Traditional Latin Mass.</p>
+                </div>
+            </div>
+
+            <!-- Article 2 -->
+            <div class="blog-card fade-in stagger-2" data-blog="arch-upgrade">
+                <div class="p-1" style="background:var(--gold); height:4px;"></div>
+                <div class="p-5">
+                    <span class="blog-tag">Architecture</span>
+                    <span class="ml-1 text-xs" style="color:var(--text-light);">&#9654; Video + Infographics</span>
+                    <h3 class="font-display text-xl font-bold mt-3 mb-2" style="color:var(--text);">The Architecture Upgrade</h3>
+                    <p class="text-sm" style="color:var(--text-muted);">How SanctissiMissa evolved from a simple web page to a multi-platform, offline-first application with a bundled SQLite corpus.</p>
+                </div>
+            </div>
+
+            <!-- Article 3 -->
+            <div class="blog-card fade-in stagger-3" data-blog="edge-case">
+                <div class="p-1" style="background:#2D5016; height:4px;"></div>
+                <div class="p-5">
+                    <span class="blog-tag">Engineering</span>
+                    <span class="ml-1 text-xs" style="color:var(--text-light);">&#9654; Video</span>
+                    <h3 class="font-display text-xl font-bold mt-3 mb-2" style="color:var(--text);">Edge Case: The Client-Server Collapse</h3>
+                    <p class="text-sm" style="color:var(--text-muted);">When the client becomes the server: how we bundled a complete liturgical database inside the app binary for true offline operation.</p>
+                </div>
+            </div>
+
+            <!-- Article 4 -->
+            <div class="blog-card fade-in stagger-4" data-blog="agentic-coder">
+                <div class="p-1" style="background:#581C87; height:4px;"></div>
+                <div class="p-5">
+                    <span class="blog-tag">AI &amp; Development</span>
+                    <span class="ml-1 text-xs" style="color:var(--text-light);">&#128196; Presentation</span>
+                    <h3 class="font-display text-xl font-bold mt-3 mb-2" style="color:var(--text);">Taming the Agentic Coder</h3>
+                    <p class="text-sm" style="color:var(--text-muted);">The counterintuitive lesson of AI-assisted development: more constraints produce better code. CLAUDE.md, session memory, and multi-agent orchestration.</p>
+                </div>
+            </div>
+
+            <!-- Article 5 -->
+            <div class="blog-card fade-in stagger-4" data-blog="ai-podcast">
+                <div class="p-1" style="background:#065F46; height:4px;"></div>
+                <div class="p-5">
+                    <span class="blog-tag">Podcast</span>
+                    <span class="ml-1 text-xs" style="color:var(--text-light);">&#127911; Audio</span>
+                    <h3 class="font-display text-xl font-bold mt-3 mb-2" style="color:var(--text);">AI Agents Build the 1962 Latin Mass</h3>
+                    <p class="text-sm" style="color:var(--text-muted);">A podcast exploring the intersection of artificial intelligence and ancient liturgy: how AI agents helped construct the digital Mass experience.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expanded Article Area -->
+        <div id="blogExpanded" class="blog-expanded mt-8">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+</section>
+
+<!-- ==================== MEDIA GALLERY ==================== -->
+<section id="media" class="section" style="background:var(--bg-card-alt);">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>Media Gallery</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>Videos, audio, infographics, and presentations from the SanctissiMissa project.</p>
+
+        <div class="flex flex-wrap gap-2 mb-8 fade-in">
+            <button class="media-filter-btn active" data-filter="all">All</button>
+            <button class="media-filter-btn" data-filter="video">Videos</button>
+            <button class="media-filter-btn" data-filter="audio">Audio</button>
+            <button class="media-filter-btn" data-filter="image">Infographics</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="mediaGrid">
+            <!-- Video: AI The New Blueprint -->
+            <div class="media-item fade-in" data-media-type="video">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">AI: The New Blueprint</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">Explainer video &middot; Overview of the SanctissiMissa project</p>
+                    <div class="relative cursor-pointer group" onclick="openLightboxVideo('AI__The_New_Blueprint.mp4','AI: The New Blueprint')">
+                        <div style="width:100%; height:180px; background:var(--code-bg); border-radius:0.25rem; display:flex; align-items:center; justify-content:center;">
+                            <span style="font-size:3rem; opacity:0.8; transition:transform 0.2s;" class="group-hover:scale-110">&#9654;&#65039;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video: Hello Word A Sacred App -->
+            <div class="media-item fade-in" data-media-type="video">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">Hello, Word: A Sacred App</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">Project origin story and vision</p>
+                    <div class="relative cursor-pointer group" onclick="openLightboxVideo('Technical-HowItWorks/Hello,_Word__A_Sacred_App.mp4','Hello, Word: A Sacred App')">
+                        <div style="width:100%; height:180px; background:var(--code-bg); border-radius:0.25rem; display:flex; align-items:center; justify-content:center;">
+                            <span style="font-size:3rem; opacity:0.8;">&#9654;&#65039;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video: Architecture Upgrade -->
+            <div class="media-item fade-in" data-media-type="video">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">The Architecture Upgrade</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">Technical deep dive into the system evolution</p>
+                    <div class="relative cursor-pointer group" onclick="openLightboxVideo('Technical-HowItWorks/The_Architecture_Upgrade__SanctissiMissa.mp4','The Architecture Upgrade')">
+                        <div style="width:100%; height:180px; background:var(--code-bg); border-radius:0.25rem; display:flex; align-items:center; justify-content:center;">
+                            <span style="font-size:3rem; opacity:0.8;">&#9654;&#65039;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video: Edge Case -->
+            <div class="media-item fade-in" data-media-type="video">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">Edge Case: Client-Server Collapse</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">How the client became the server</p>
+                    <div class="relative cursor-pointer group" onclick="openLightboxVideo('Technical-HowItWorks/Edge_Case__The_Client-Server_Collapse (1).mp4','Edge Case: Client-Server Collapse')">
+                        <div style="width:100%; height:180px; background:var(--code-bg); border-radius:0.25rem; display:flex; align-items:center; justify-content:center;">
+                            <span style="font-size:3rem; opacity:0.8;">&#9654;&#65039;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio: Podcast -->
+            <div class="media-item fade-in" data-media-type="audio">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">AI Agents Build the 1962 Latin Mass</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">Podcast &middot; AI meets ancient liturgy</p>
+                    <audio controls preload="none" style="width:100%;">
+                        <source src="AI_agents_build_the_1962_Latin_Mass.m4a" type="audio/mp4">
+                    </audio>
+                </div>
+            </div>
+
+            <!-- Infographic: Main -->
+            <div class="media-item fade-in" data-media-type="image">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">SanctissiMissa Infographic</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">Project overview architecture diagram</p>
+                    <img src="Sanctissimissa-Infographic-18mar2026.png" alt="SanctissiMissa Infographic" style="width:100%; border-radius:0.25rem; cursor:pointer;" loading="lazy" onclick="openLightboxImage(this.src, this.alt)">
+                </div>
+            </div>
+
+            <!-- Infographic: Data Architecture -->
+            <div class="media-item fade-in" data-media-type="image">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">Data Architecture</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">How liturgical data flows through the system</p>
+                    <img src="Technical-HowItWorks/Sanctissimissa-Data-Architecture.png" alt="Data Architecture" style="width:100%; border-radius:0.25rem; cursor:pointer;" loading="lazy" onclick="openLightboxImage(this.src, this.alt)">
+                </div>
+            </div>
+
+            <!-- Infographic: Mass Construction Flow -->
+            <div class="media-item fade-in" data-media-type="image">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">Mass Construction Flow</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">How Mass texts are assembled from the corpus</p>
+                    <img src="Technical-HowItWorks/Sanctissimissa-MassConstructionFlow.png" alt="Mass Construction Flow" style="width:100%; border-radius:0.25rem; cursor:pointer;" loading="lazy" onclick="openLightboxImage(this.src, this.alt)">
+                </div>
+            </div>
+
+            <!-- Infographic: Modern Tech Stack -->
+            <div class="media-item fade-in" data-media-type="image">
+                <div class="p-4">
+                    <h4 class="font-display font-bold mb-2" style="color:var(--crimson);">Modern Tech Stack, Ancient Liturgy</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-light);">Where cutting-edge engineering meets timeless tradition</p>
+                    <img src="Technical-HowItWorks/ModernTechStack-Ancient-Liturgy.png" alt="Modern Tech Stack" style="width:100%; border-radius:0.25rem; cursor:pointer;" loading="lazy" onclick="openLightboxImage(this.src, this.alt)">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== READING LIST ==================== -->
+<section id="reading-list" class="section">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>Curated Catholic Primary Texts</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>A public-domain reading library planned for integration into SanctissiMissa, organized by implementation priority.</p>
+
+        <div class="overflow-x-auto fade-in">
+            <table class="w-full text-sm" style="border-collapse:collapse; min-width:800px;">
+                <thead>
+                    <tr style="border-bottom:2px solid var(--gold);">
+                        <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Tier</th>
+                        <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Collection / Work</th>
+                        <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Language</th>
+                        <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Edition</th>
+                        <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">PD Status</th>
+                        <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Formats</th>
+                        <th class="text-left p-3 font-display font-bold" style="color:var(--crimson);">Size (est.)</th>
+                    </tr>
+                </thead>
+                <tbody style="color:var(--text-muted);">
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">Clementine / Vulgate Latin Bible</td>
+                        <td class="p-3">Latin</td>
+                        <td class="p-3">1861 PD edition</td>
+                        <td class="p-3">Public domain; redistribution encouraged</td>
+                        <td class="p-3">TEI-XML, JSON, EPUB, plain text</td>
+                        <td class="p-3">~10-40 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">Douay-Rheims (Challoner revision)</td>
+                        <td class="p-3">English</td>
+                        <td class="p-3">1749-1752</td>
+                        <td class="p-3">Project Gutenberg PD</td>
+                        <td class="p-3">TEI-XML, JSON, EPUB, plain text</td>
+                        <td class="p-3">~5.6 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">Roman Martyrology</td>
+                        <td class="p-3">English / Latin</td>
+                        <td class="p-3">1897 scan (Baltimore)</td>
+                        <td class="p-3">Internet Archive scan, PD</td>
+                        <td class="p-3">TEI-XML, JSON per day, PDF</td>
+                        <td class="p-3">~29 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">Golden Legend</td>
+                        <td class="p-3">English + Latin</td>
+                        <td class="p-3">1900 edition</td>
+                        <td class="p-3">Open Library PD</td>
+                        <td class="p-3">TEI-XML, JSON by saint, EPUB</td>
+                        <td class="p-3">~20-50 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">Butler's Lives of the Saints</td>
+                        <td class="p-3">English</td>
+                        <td class="p-3">Project Gutenberg volumes</td>
+                        <td class="p-3">Project Gutenberg PD</td>
+                        <td class="p-3">TEI-XML, JSON by date, EPUB</td>
+                        <td class="p-3">~50-200 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">Rule of St Benedict</td>
+                        <td class="p-3">Latin + English</td>
+                        <td class="p-3">1875 PDF (OSB archive)</td>
+                        <td class="p-3">OSB archive PD edition</td>
+                        <td class="p-3">TEI-XML, JSON by chapter, EPUB</td>
+                        <td class="p-3">~1-3 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">ANF (Ante-Nicene Fathers)</td>
+                        <td class="p-3">English</td>
+                        <td class="p-3">10 vols, 1885-1897</td>
+                        <td class="p-3">Print PD (verify digitization)</td>
+                        <td class="p-3">TEI-XML, JSON, EPUB</td>
+                        <td class="p-3">~100-400 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-mvp px-2 py-0.5 rounded text-xs font-bold">MVP</span></td>
+                        <td class="p-3 font-semibold">NPNF (Nicene &amp; Post-Nicene Fathers)</td>
+                        <td class="p-3">English</td>
+                        <td class="p-3">1886-1900</td>
+                        <td class="p-3">Print PD (verify digitization)</td>
+                        <td class="p-3">TEI-XML, JSON, EPUB</td>
+                        <td class="p-3">~200-800 MB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-p2 px-2 py-0.5 rounded text-xs font-bold">Phase 2</span></td>
+                        <td class="p-3 font-semibold">Patrologia Latina</td>
+                        <td class="p-3">Latin</td>
+                        <td class="p-3">First printings, 1844-1855</td>
+                        <td class="p-3">Scans on Archive.org / Google Books</td>
+                        <td class="p-3">TEI-XML, JSON, facsimiles</td>
+                        <td class="p-3">Multiple GB</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--border-light);">
+                        <td class="p-3"><span class="tier-p2 px-2 py-0.5 rounded text-xs font-bold">Phase 2</span></td>
+                        <td class="p-3 font-semibold">Latin Library Corpus</td>
+                        <td class="p-3">Latin</td>
+                        <td class="p-3">Mixed corpus</td>
+                        <td class="p-3">PD per LICENSE in Git repo</td>
+                        <td class="p-3">Plain text, TEI, JSON indexes</td>
+                        <td class="p-3">~108 MB</td>
+                    </tr>
+                    <tr>
+                        <td class="p-3"><span class="tier-p3 px-2 py-0.5 rounded text-xs font-bold">Phase 3</span></td>
+                        <td class="p-3 font-semibold">Acta Sanctorum</td>
+                        <td class="p-3">Latin (mostly)</td>
+                        <td class="p-3">Multi-volume Bollandist series</td>
+                        <td class="p-3">Dataset-scale project</td>
+                        <td class="p-3">TEI-XML, facsimile, JSON</td>
+                        <td class="p-3">Tens of GB+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== DOWNLOADS ==================== -->
+<section id="downloads" class="section" style="background:var(--bg-card-alt);">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>Download Alpha Release</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v0.1.0-alpha.66954</strong> &mdash; 20 March 2026.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <!-- Android APK — PRIMARY -->
+            <div class="dl-card fade-in stagger-1" style="border:2px solid var(--gold); position:relative;">
+                <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:#fff; font-size:0.65rem; font-weight:700; padding:2px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Recommended</div>
+                <div class="text-3xl mb-3">&#128241;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Android APK</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; Min Android 7.0</p>
+                <a href="https://github.com/Robin-s-AI-World/HelloWord/releases" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <p style="line-height:1.6;">Open this page on your Android device, tap <strong>Download APK</strong>, then tap the downloaded file to install. If prompted, allow installation from your browser under <em>Settings &rarr; Install unknown apps</em>.</p>
+                </div>
+            </div>
+
+            <!-- Web PWA -->
+            <div class="dl-card fade-in stagger-2">
+                <div class="text-3xl mb-3">&#127760;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Web App</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Try it in your browser</p>
+                <a href="http://192.168.0.126:18080" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;" target="_blank">Launch Web App</a>
+            </div>
+
+            <!-- AppImage -->
+            <div class="dl-card fade-in stagger-3">
+                <div class="text-3xl mb-3">&#128187;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux AppImage</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x86_64</p>
+                <a href="https://github.com/Robin-s-AI-World/HelloWord/releases" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;">Download AppImage</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
+                        chmod +x SanctissiMissa-Linux-Alpha-17Mar2026.AppImage<br>
+                        ./SanctissiMissa-Linux-Alpha-17Mar2026.AppImage
+                    </code>
+                </div>
+            </div>
+
+            <!-- DEB -->
+            <div class="dl-card fade-in stagger-4">
+                <div class="text-3xl mb-3">&#128230;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux DEB</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Debian/Ubuntu &middot; x86_64</p>
+                <a href="https://github.com/Robin-s-AI-World/HelloWord/releases" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;">Download DEB</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
+                        sudo dpkg -i SanctissiMissa-Linux-Alpha-17Mar2026.deb<br>
+                        sudo apt-get install -f  # Fix dependencies if needed<br>
+                        sanctissimissa
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHA256 Checksums -->
+        <div class="ornate p-4 fade-in" style="border-radius:0.5rem;">
+            <h4 class="font-display font-bold mb-3" style="color:var(--gold);">SHA256 Checksums</h4>
+            <div class="code-block" style="font-size:0.72rem; line-height:1.8;">
+                <span class="comment"># Verify your download:</span><br>
+                <span style="color:#A6E3A1;">3d012a21d41d3f6fb8761edaeb0c282a94c6f3b0</span>..  SanctissiMissa-Android-Alpha-17Mar2026.apk<br>
+                <span style="color:#A6E3A1;">0c7618bf653420b1ae049910052cdcb2ffa14afe</span>..  SanctissiMissa-Linux-Alpha-17Mar2026.AppImage<br>
+                <span style="color:#A6E3A1;">1a7c159f7d6c868de5cbfc67d5bb50e1f02fd07c</span>..  SanctissiMissa-Linux-Alpha-17Mar2026.deb<br>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== ABOUT / BIOGRAPHY ==================== -->
+<section id="about" class="section">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>About the Author</h2>
+
+        <div class="ornate ornate-lg p-6 md:p-10 fade-in" style="border-radius:0.5rem;">
+            <div class="text-center mb-6">
+                <div class="inline-block w-24 h-24 rounded-full flex items-center justify-center text-3xl" style="background:var(--gold-glow); border:2px solid var(--gold); line-height:24px;">
+                    <span style="font-size:2.5rem;">&#9768;</span>
+                </div>
+            </div>
+
+            <h3 class="font-display text-2xl font-bold text-center mb-6 crimson-accent">Robin L. M. Cheung, MBA</h3>
+
+            <div class="space-y-4 text-sm" style="color:var(--text-muted); max-width:640px; margin:0 auto; text-align:justify;" data-editable>
+                <p>For four years, Robin Cheung served as a daily altar server at <strong>St. Lawrence Martyr parish</strong> in Toronto, Ontario&mdash;the designated <strong>Diocesan Traditional Latin Mass parish</strong> for the Archdiocese of Toronto. In this capacity, he was honoured with the grace of serving beside <strong>Fr. Steven Szakaczki</strong> and <strong>Fr. Liam Gavigan</strong>, learning the rhythms and rubrics of the 1962 <em>Usus Antiquior</em> through daily practice at the altar.</p>
+
+                <p>Those years of reverent service planted a seed. The ancient liturgy&mdash;with its precision, its beauty, its unbroken connection to centuries of Catholic worship&mdash;demanded a digital companion worthy of its dignity. When Robin discovered <strong>Laszlo Kiss'</strong> extraordinary <em>DivinumOfficium</em> project (an MIT-licensed digital transcription of the complete traditional liturgical texts), he recognized an opportunity to build something that had never existed: a modern, offline-first, multi-platform application that could bring the complete Traditional Latin Mass to any device, anywhere in the world&mdash;without requiring an internet connection.</p>
+
+                <p>A software engineer by profession and a traditional Catholic by conviction, Robin brings both technical rigor and deep liturgical understanding to SanctissiMissa. The project's architecture reflects its subject matter: like the stone churches that have sheltered the faithful for centuries, the app is built to endure&mdash;with a complete 27.4 MB bilingual corpus bundled inside every installation, immune to server outages, subscription lapses, or internet disruptions.</p>
+
+                <p>SanctissiMissa is not merely a technical exercise. It is an act of service to the Church&mdash;an offering of modern engineering skill in support of ancient, unchanging worship. The name itself echoes this mission: <em>Sanctissima Missa</em>, the Most Holy Mass.</p>
+            </div>
+
+            <p class="text-center mt-8 font-display text-lg font-bold" style="color:var(--gold);">+AMDG</p>
+            <p class="text-center text-xs mt-1" style="color:var(--text-light);"><em>Ad Majorem Gloriam Dei</em></p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="py-10 px-4 text-center" style="border-top:1px solid var(--border);">
+    <p class="font-display text-lg italic mb-2" style="color:var(--gold);">Soli Deo gloria</p>
+    <p class="text-xs mb-3" style="color:var(--text-light);">
+        Copyright &copy; 2025-2026 Robin L. M. Cheung, MBA. All rights reserved.
+    </p>
+    <p class="text-xs" style="color:var(--text-light);">
+        <a href="https://github.com/rebots-online/HelloWord" target="_blank" style="color:var(--gold);">GitHub</a>
+        <span class="mx-2">&middot;</span>
+        v0.1.0-alpha.66954
+        <span class="mx-2">&middot;</span>
+        Liturgical texts derived from <a href="https://github.com/DivinumOfficium/divinum-officium" target="_blank" style="color:var(--gold);">DivinumOfficium</a> (MIT License)
+    </p>
+</footer>
+
+<!-- ==================== CMS TOOLBAR ==================== -->
+<div class="cms-toolbar" id="cmsToolbar">
+    <span class="text-xs font-bold" style="color:var(--gold);">EDIT MODE</span>
+    <button onclick="cmsExport()" class="px-3 py-1 rounded text-xs font-semibold" style="background:var(--gold); color:#fff;">Export HTML</button>
+    <button onclick="cmsReset()" class="px-3 py-1 rounded text-xs font-semibold" style="border:1px solid var(--crimson); color:var(--crimson);">Reset</button>
+</div>
+
+<!-- ==================== LIGHTBOX ==================== -->
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+        <button class="lightbox-close" onclick="closeLightbox()" title="Close">&times;</button>
+        <div id="lightboxBody"></div>
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+</div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ===== THEME =====
+    var html = document.documentElement;
+    var themeBtn = document.getElementById('themeToggle');
+    var themeIcon = document.getElementById('themeIcon');
+
+    function setTheme(t) {
+        html.setAttribute('data-theme', t);
+        localStorage.setItem('sm_theme', t);
+        themeIcon.innerHTML = t === 'dark' ? '&#9728;' : '&#9790;';
+    }
+    window.toggleTheme = function() {
+        setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    };
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+    // Initialize icon
+    themeIcon.innerHTML = html.getAttribute('data-theme') === 'dark' ? '&#9728;' : '&#9790;';
+
+    // ===== MOBILE MENU =====
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', function() { mobileMenu.classList.toggle('open'); });
+    window.closeMobile = function() { mobileMenu.classList.remove('open'); };
+
+    // ===== SCROLL NAV =====
+    var navbar = document.getElementById('navbar');
+    var navLinks = document.querySelectorAll('.nav-link[data-nav]');
+    var sections = document.querySelectorAll('section[id]');
+
+    window.addEventListener('scroll', function() {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Active section highlighting
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                navLinks.forEach(function(link) {
+                    link.classList.toggle('active', link.getAttribute('data-nav') === entry.target.id);
+                });
+            }
+        });
+    }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+    sections.forEach(function(s) { observer.observe(s); });
+
+    // ===== SCROLL ANIMATIONS =====
+    var fadeObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                fadeObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(function(el) { fadeObserver.observe(el); });
+
+    // ===== FEATURE PILLARS =====
+    var pillarData = {
+        mass: {
+            title: 'Mass Texts',
+            icon: '&#9768;',
+            points: [
+                'Complete 1962 Roman Missal propers and ordinary',
+                'Bilingual Latin/English side-by-side display',
+                'Introitus, Oratio, Lectio, Graduale, Evangelium, Offertorium, Secreta, Communio, Postcommunio',
+                'Ember Day variants and commemorations handled automatically',
+                'Cross-reference chain resolution for Commune texts'
+            ]
+        },
+        calendar: {
+            title: 'Liturgical Calendar',
+            icon: '&#128197;',
+            points: [
+                'Full 1962 rubrics calendar engine',
+                'Moveable feasts (Easter, Pentecost, Ember Days)',
+                'Sanctoral and temporal cycle integration',
+                'Proper precedence rules and winner selection',
+                'Month grid view with liturgical colors'
+            ]
+        },
+        office: {
+            title: 'Divine Office',
+            icon: '&#128214;',
+            points: [
+                'Breviary texts for the 8 canonical hours',
+                'Matins, Lauds, Prime, Terce, Sext, None, Vespers, Compline',
+                'Guided prayer mode with auto-advance',
+                'Liturgical Hour reminders with system notifications',
+                'Calendar-aware: links to the correct office for each day'
+            ]
+        },
+        journal: {
+            title: 'Personal Journaling',
+            icon: '&#9998;',
+            points: [
+                'Add notes to any Mass text section',
+                'Voice journal: audio reflections anchored to liturgical texts',
+                'Local-first storage for privacy (IndexedDB/SQLite)',
+                'Searchable and organized by date and liturgical context',
+                'Word-level text annotation support'
+            ]
+        },
+        parish: {
+            title: 'Parish Information',
+            icon: '&#9962;',
+            points: [
+                'Parish schedules and Mass times',
+                'Community announcements and events',
+                'Diocesan TLM directory integration (future)',
+                'Fellowship features: groups, shared annotations',
+                'Local parish customization options'
+            ]
+        }
+    };
+
+    document.querySelectorAll('.pillar').forEach(function(el) {
+        el.addEventListener('click', function() {
+            var key = el.getAttribute('data-pillar');
+            var data = pillarData[key];
+            if (!data) return;
+            document.querySelectorAll('.pillar').forEach(function(p) { p.classList.remove('active'); });
+            el.classList.add('active');
+            var html = '<h3 class="font-display text-xl font-bold mb-3" style="color:var(--crimson);">' + data.icon + ' ' + data.title + '</h3><ul class="space-y-2 text-sm" style="color:var(--text-muted);">';
+            data.points.forEach(function(p) { html += '<li>&#8226; ' + p + '</li>'; });
+            html += '</ul>';
+            document.getElementById('pillarContent').innerHTML = html;
+        });
+    });
+
+    // ===== ARCHITECTURE TABS =====
+    document.querySelectorAll('.arch-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.arch-tab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.arch-tab-content').forEach(function(c) { c.classList.remove('active'); });
+            tab.classList.add('active');
+            document.getElementById('arch-' + tab.getAttribute('data-arch')).classList.add('active');
+        });
+    });
+
+    // ===== ROADMAP CHART =====
+    var roadmapData = {
+        'Phase 1': { title: 'MVP: Core Missal & PWA Foundation', tasks: ['React 19 + Vite + Tailwind setup', 'SQLite corpus build pipeline (build-corpus.js)', 'Calendar engine with 1962 rubrics', 'Mass text display with bilingual propers', 'Offline web via sql.js + WASM', 'FTS5 full-text search'] },
+        'Phase 2': { title: 'Divine Office & Devotions', tasks: ['Breviary text integration', 'Canonical hours UI', 'Guided prayer mode (Rosary, Chaplets)', 'Liturgical Hour reminders', 'Interactive devotional tools'] },
+        'Phase 3': { title: 'Voice Journal & Interactivity', tasks: ['Voice recording anchored to text sections', 'Voice journal UX/UI flow', 'Text annotation system', 'Rich note-taking with word-level anchoring', 'Audio reflection playback and search'] },
+        'Phase 4': { title: 'Polish & Accessibility', tasks: ['Voice command navigation', 'Text-to-Speech for Latin/English', 'Advanced theming (Sepia/Night/Custom)', 'Performance optimization', 'Accessibility audit (WCAG 2.1 AA)', 'Multi-language interface support'] }
+    };
+
+    function updateRoadmap(phase) {
+        var data = roadmapData[phase];
+        if (!data) return;
+        var el = document.getElementById('roadmapDetails');
+        var h = '<h3 class="font-display text-lg font-bold mb-3" style="color:var(--crimson);">' + data.title + '</h3><ul class="space-y-1 text-sm" style="color:var(--text-muted);">';
+        data.tasks.forEach(function(t) { h += '<li>&#8226; ' + t + '</li>'; });
+        el.innerHTML = h + '</ul>';
+    }
+
+    var ctx = document.getElementById('roadmapChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
+            datasets: [{
+                data: [1, 1, 1, 1],
+                backgroundColor: ['rgba(139,0,0,0.7)', 'rgba(184,134,11,0.7)', 'rgba(45,80,22,0.7)', 'rgba(88,28,135,0.7)'],
+                borderColor: ['#8B0000', '#B8860B', '#2D5016', '#581C87'],
+                borderWidth: 2, barPercentage: 0.5
+            }]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: {
+                x: { display: false },
+                y: { grid: { display: false }, ticks: { color: 'var(--text)', font: { weight: '600', family: 'Cormorant Garamond' } } }
+            },
+            onClick: function(e, elements) {
+                if (elements.length > 0) updateRoadmap(chart.data.labels[elements[0].index]);
+            },
+            onHover: function(e, el) { e.native.target.style.cursor = el[0] ? 'pointer' : 'default'; }
+        }
+    });
+    updateRoadmap('Phase 1');
+
+    // ===== BLOG =====
+    var blogData = {
+        'sacred-app': {
+            title: 'Hello, Word: A Sacred App',
+            tag: 'Vision',
+            content: '<p>Every programmer begins their journey with "Hello, World." It is the universal first utterance of code&mdash;a proof of life. But what happens when that familiar greeting is transformed by a single letter?</p><p class="mt-3">"Hello, Word" is a reverent departure from convention. The <em>Word</em> here is not a string variable&mdash;it is the <em>Verbum</em> of St. John\'s Prologue: "In principio erat Verbum, et Verbum erat apud Deum, et Deus erat Verbum." In the beginning was the Word, and the Word was with God, and the Word was God.</p><p class="mt-3">SanctissiMissa is the realization of this idea: that modern software engineering can serve the ancient, unchanging liturgy. The Traditional Latin Mass, celebrated according to the 1962 Roman Missal, is a treasury of prayer that spans two millennia. This project aims to make that treasury accessible to anyone with a phone, a tablet, or a computer&mdash;whether they have internet access or not.</p>',
+            media: '<video controls preload="none" style="width:100%; border-radius:0.5rem; margin-top:1rem;"><source src="Technical-HowItWorks/Hello,_Word__A_Sacred_App.mp4" type="video/mp4"></video>'
+        },
+        'arch-upgrade': {
+            title: 'The Architecture Upgrade: SanctissiMissa',
+            tag: 'Architecture',
+            content: '<p>SanctissiMissa didn\'t begin as a multi-platform, offline-first application. It started as a simple web page pulling liturgical texts from an API. But the needs of the faithful demanded more.</p><p class="mt-3">The architecture evolved through several key insights: First, that <strong>offline access is non-negotiable</strong> for a liturgical app&mdash;you can\'t ask someone to find Wi-Fi before they can pray. Second, that a <strong>bundled SQLite database</strong> (27.4 MB of bilingual liturgical corpus) eliminates the server dependency entirely. Third, that <strong>Tauri 2</strong> provides a Rust-powered native shell that can wrap the same React codebase for Android, Linux, and the web.</p><p class="mt-3">The result is a four-layer stratigraphy: Presentation (React + Tailwind), Bridge (platform adapters), Engine (calendar + corpus logic), and Bedrock (SQLite + DivinumOfficium corpus). Each layer has a single responsibility, and the whole stack works identically whether deployed as a web app, an APK, or a Linux binary.</p>',
+            media: '<video controls preload="none" style="width:100%; border-radius:0.5rem; margin-top:1rem;"><source src="Technical-HowItWorks/The_Architecture_Upgrade__SanctissiMissa.mp4" type="video/mp4"></video><div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3"><img src="Technical-HowItWorks/Sanctissimissa-Data-Architecture.png" alt="Data Architecture" style="width:100%; border-radius:0.25rem; cursor:pointer;" onclick="window.open(this.src,\'_blank\')" loading="lazy"><img src="Technical-HowItWorks/Sanctissimissa-MassConstructionFlow.png" alt="Mass Construction" style="width:100%; border-radius:0.25rem; cursor:pointer;" onclick="window.open(this.src,\'_blank\')" loading="lazy"><img src="Technical-HowItWorks/ModernTechStack-Ancient-Liturgy.png" alt="Tech Stack" style="width:100%; border-radius:0.25rem; cursor:pointer;" onclick="window.open(this.src,\'_blank\')" loading="lazy"></div>'
+        },
+        'edge-case': {
+            title: 'Edge Case: The Client-Server Collapse',
+            tag: 'Engineering',
+            content: '<p>In traditional web architecture, there is a clear boundary: the client asks, the server answers. But what happens when the server\'s entire database is small enough to fit inside the client?</p><p class="mt-3">The complete liturgical corpus for the 1962 Roman Missal&mdash;every Mass proper, every calendar calculation, every cross-reference chain&mdash;compresses into a 27.4 MB SQLite file. That\'s smaller than a single high-resolution photo. This realization triggered what we call the "client-server collapse": the client <em>becomes</em> the server.</p><p class="mt-3">On the web, sql.js loads the entire database into WebAssembly memory. On Android and Linux, the database ships inside the app binary via Tauri 2\'s asset bundling. The API layer (Node.js + Express on port 9837) still exists for development and the web PWA\'s initial load, but the native apps never need it. They are self-contained stone churches: no electricity, no internet, just the texts.</p>',
+            media: '<video controls preload="none" style="width:100%; border-radius:0.5rem; margin-top:1rem;"><source src="Technical-HowItWorks/Edge_Case__The_Client-Server_Collapse (1).mp4" type="video/mp4"></video>'
+        },
+        'agentic-coder': {
+            title: 'Taming the Agentic Coder',
+            tag: 'AI &amp; Development',
+            content: '<p>Building SanctissiMissa with AI coding assistants revealed a counterintuitive truth: <strong>more constraints produce better code</strong>.</p><p class="mt-3"><strong>The Paradox:</strong> AI coding agents have extraordinary capability but zero context. Without guardrails, they generate code that looks correct but doesn\'t fit the architecture, duplicates existing utilities, or introduces subtle bugs that only manifest in production.</p><p class="mt-3"><strong>The Harness:</strong> The solution was a set of structured documents&mdash;CLAUDE.md (project conventions), CHECKLIST.md (task tracking), and PROJECT_INDEX.md (codebase map)&mdash;that give the AI agent persistent context across sessions. These files act as "institutional memory" for the AI.</p><p class="mt-3"><strong>Session Memory:</strong> Each coding session follows a lifecycle: load context &rarr; plan &rarr; implement &rarr; checkpoint &rarr; save context. This prevents the "coding in circles" problem where each new session starts from scratch.</p><p class="mt-3"><strong>Multi-Agent Orchestration:</strong> Complex tasks are broken into sub-tasks delegated to specialized agents, each with focused context and clear success criteria. The orchestrator coordinates results.</p><p class="mt-3"><strong>The Lesson:</strong> Freedom without structure is chaos. The AI produces its best work when given clear boundaries, explicit conventions, and persistent context&mdash;just like a well-managed engineering team.</p>',
+            media: '<a href="Technical-HowItWorks/Taming_the_Agentic_Coder.pdf" target="_blank" class="inline-block mt-3 px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;">View Full Presentation (PDF)</a>'
+        },
+        'ai-podcast': {
+            title: 'AI Agents Build the 1962 Latin Mass',
+            tag: 'Podcast',
+            content: '<p>A podcast exploring one of the most unlikely intersections in modern technology: artificial intelligence and ancient Catholic liturgy.</p><p class="mt-3">How do you teach an AI to understand the 1962 rubrics? How does a calendar engine handle the complex precedence rules that govern which feast wins on any given day? What happens when AI agents encounter the recursive cross-reference chains that connect Commune texts to individual saints?</p><p class="mt-3">This episode covers the journey from DivinumOfficium\'s MIT-licensed text corpus to a fully functional, offline-first liturgical application&mdash;and the surprising challenges along the way.</p>',
+            media: '<audio controls preload="none" style="width:100%; margin-top:1rem;"><source src="AI_agents_build_the_1962_Latin_Mass.m4a" type="audio/mp4"></audio>'
+        }
+    };
+
+    document.querySelectorAll('.blog-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var key = card.getAttribute('data-blog');
+            var data = blogData[key];
+            if (!data) return;
+            var exp = document.getElementById('blogExpanded');
+            var h = '<div class="ornate p-6 md:p-8" style="border-radius:0.5rem;">';
+            h += '<div class="flex justify-between items-start mb-4"><div>';
+            h += '<span class="blog-tag">' + data.tag + '</span>';
+            h += '<h3 class="font-display text-2xl font-bold mt-2" style="color:var(--crimson);">' + data.title + '</h3>';
+            h += '</div><button onclick="closeBlog()" class="text-sm px-3 py-1 rounded" style="border:1px solid var(--border); color:var(--text-muted);">&times; Close</button></div>';
+            h += '<div class="text-sm" style="color:var(--text-muted); line-height:1.8;">' + data.content + '</div>';
+            h += data.media;
+            h += '</div>';
+            exp.innerHTML = h;
+            exp.classList.add('active');
+            exp.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    window.closeBlog = function() {
+        var exp = document.getElementById('blogExpanded');
+        exp.classList.remove('active');
+        exp.innerHTML = '';
+    };
+
+    // ===== MEDIA GALLERY FILTER =====
+    document.querySelectorAll('.media-filter-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var filter = btn.getAttribute('data-filter');
+            document.querySelectorAll('.media-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('#mediaGrid .media-item').forEach(function(item) {
+                if (filter === 'all' || item.getAttribute('data-media-type') === filter) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // ===== CMS EDIT MODE =====
+    var editMode = false;
+    var editables = document.querySelectorAll('[data-editable]');
+    var cmsKey = 'sanctissimissa_cms_edits';
+
+    // Check URL for ?edit=true
+    if (new URLSearchParams(window.location.search).get('edit') === 'true') {
+        enableEditMode();
+    }
+
+    // Keyboard shortcut: Ctrl+Shift+E
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+            e.preventDefault();
+            if (editMode) disableEditMode(); else enableEditMode();
+        }
+    });
+
+    function enableEditMode() {
+        editMode = true;
+        editables.forEach(function(el, i) {
+            el.setAttribute('contenteditable', 'true');
+            el.classList.add('editing');
+            el.setAttribute('data-edit-id', 'editable-' + i);
+            // Load saved edits
+            var saved = JSON.parse(localStorage.getItem(cmsKey) || '{}');
+            if (saved['editable-' + i]) el.innerHTML = saved['editable-' + i];
+            el.addEventListener('input', saveCmsEdit);
+        });
+        document.getElementById('cmsToolbar').classList.add('active');
+    }
+
+    function disableEditMode() {
+        editMode = false;
+        editables.forEach(function(el) {
+            el.setAttribute('contenteditable', 'false');
+            el.classList.remove('editing');
+            el.removeEventListener('input', saveCmsEdit);
+        });
+        document.getElementById('cmsToolbar').classList.remove('active');
+    }
+
+    function saveCmsEdit(e) {
+        var saved = JSON.parse(localStorage.getItem(cmsKey) || '{}');
+        saved[e.target.getAttribute('data-edit-id')] = e.target.innerHTML;
+        localStorage.setItem(cmsKey, JSON.stringify(saved));
+    }
+
+    window.cmsExport = function() {
+        var clone = document.documentElement.cloneNode(true);
+        // Remove edit mode artifacts
+        clone.querySelectorAll('[contenteditable]').forEach(function(el) { el.removeAttribute('contenteditable'); el.classList.remove('editing'); });
+        var blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'index-edited.html';
+        a.click();
+    };
+
+    window.cmsReset = function() {
+        if (confirm('Reset all edits to original content? This cannot be undone.')) {
+            localStorage.removeItem(cmsKey);
+            location.reload();
+        }
+    };
+
+    // ===== LOAD CMS EDITS ON PAGE LOAD (view mode) =====
+    var savedEdits = JSON.parse(localStorage.getItem(cmsKey) || '{}');
+    if (Object.keys(savedEdits).length > 0) {
+        editables.forEach(function(el, i) {
+            if (savedEdits['editable-' + i]) el.innerHTML = savedEdits['editable-' + i];
+        });
+    }
+
+});
+
+// ===== LIGHTBOX FUNCTIONS (outside DOMContentLoaded) =====
+function openLightboxVideo(src, caption) {
+    var overlay = document.getElementById('lightboxOverlay');
+    var body = document.getElementById('lightboxBody');
+    var cap = document.getElementById('lightboxCaption');
+    body.innerHTML = '<video controls autoplay style="max-width:90vw; max-height:85vh; border-radius:0.5rem; box-shadow:0 8px 60px rgba(0,0,0,0.5);"><source src="' + src + '" type="video/mp4"></video>';
+    cap.textContent = caption || '';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function openLightboxImage(src, caption) {
+    var overlay = document.getElementById('lightboxOverlay');
+    var body = document.getElementById('lightboxBody');
+    var cap = document.getElementById('lightboxCaption');
+    body.innerHTML = '<img src="' + src + '" alt="' + (caption || '') + '" style="max-width:90vw; max-height:85vh; border-radius:0.5rem; box-shadow:0 8px 60px rgba(0,0,0,0.5);">';
+    cap.textContent = caption || '';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    var overlay = document.getElementById('lightboxOverlay');
+    var body = document.getElementById('lightboxBody');
+    // Pause any playing video
+    var vid = body.querySelector('video');
+    if (vid) vid.pause();
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(function() { body.innerHTML = ''; }, 300);
+}
+
+// Close lightbox on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
+</script>
+
+</body>
+</html>
