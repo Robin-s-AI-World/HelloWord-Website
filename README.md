@@ -4,14 +4,14 @@ Interactive PRD and landing page for SanctissiMissa - Traditional Latin Mass app
 
 ## Live Site
 
-- **PRD Website**: https://sanctissimissa-app.surge.sh
-- **Web App**: https://sanctissimissa.surge.sh
+- **Info Site**: http://192.168.0.126:18081
+- **Web App**: http://192.168.0.126:18080
 
 ## Deployment
 
 ```bash
-# Deploy PRD website
-surge ./ sanctissimissa-app.surge.sh
+# Deploy info site to self-hosted LXC (atomic symlink release)
+./deploy-to-lxc.sh
 ```
 
 ## Project Structure
