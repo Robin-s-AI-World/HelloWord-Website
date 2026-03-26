@@ -1,0 +1,125 @@
+name: Update Downloads (Triggered by HelloWord)
+
+on:
+  repository_dispatch:
+    types: [update-downloads, new-release]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g., 0.1.1-alpha)'
+        required: true
+      build_number:
+        description: 'Build number'
+        required: true
+      apk_url:
+        description: 'APK download URL'
+        required: false
+      exe_url:
+        description: 'EXE download URL'
+        required: false
+      apk_hash:
+        description: 'APK SHA256 hash'
+        required: false
+      exe_hash:
+        description: 'EXE SHA256 hash'
+        required: false
+
+jobs:
+  update-downloads:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Download new APK
+        if: github.event.inputs.apk_url != ''
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          BUILD="${{ github.event.inputs.build_number }}"
+
+          # Remove old APKs
+          rm -f downloads/*.apk
+
+          # Download new APK
+          curl -L -o "downloads/sanctissimissa-android-apk-universal-release-v${VERSION}-build${BUILD}-signed.apk" \
+            "${{ github.event.inputs.apk_url }}"
+
+          # Calculate hash
+          APK_HASH=$(sha256sum "downloads/sanctissimissa-android-apk-universal-release-v${VERSION}-build${BUILD}-signed.apk" | cut -d' ' -f1)
+          echo "APK_HASH=${APK_HASH}" >> $GITHUB_ENV
+
+      - name: Download new EXE
+        if: github.event.inputs.exe_url != ''
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          BUILD="${{ github.event.inputs.build_number }}"
+
+          # Remove old EXEs
+          rm -f downloads/*.exe
+
+          # Download new EXE
+          curl -L -o "downloads/SanctissiMissa-Windows-v${VERSION}-build${BUILD}-x64.exe" \
+            "${{ github.event.inputs.exe_url }}"
+
+          # Calculate hash
+          EXE_HASH=$(sha256sum "downloads/SanctissiMissa-Windows-v${VERSION}-build${BUILD}-x64.exe" | cut -d' ' -f1)
+          echo "EXE_HASH=${EXE_HASH}" >> $GITHUB_ENV
+
+      - name: Update version info in index.html
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          BUILD="${{ github.event.inputs.build_number }}"
+
+          # Update version in index.html
+          sed -i "s/data-version=\"[^\"]*\"/data-version=\"v${VERSION} Build ${BUILD}\"/g" index.html || true
+
+          # Update download links
+          sed -i "s|sanctissimissa-android-apk-.*\.apk|sanctissimissa-android-apk-universal-release-v${VERSION}-build${BUILD}-signed.apk|g" index.html || true
+          sed -i "s|SanctissiMissa-Windows-.*\.exe|SanctissiMissa-Windows-v${VERSION}-build${BUILD}-x64.exe|g" index.html || true
+
+      - name: Generate hashes.json
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          BUILD="${{ github.event.inputs.build_number }}"
+
+          cat > downloads/hashes.json << EOF
+          {
+            "version": "${VERSION}",
+            "build": "${BUILD}",
+            "generated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "files": {
+              "apk": {
+                "file": "sanctissimissa-android-apk-universal-release-v${VERSION}-build${BUILD}-signed.apk",
+                "sha256": "${{ env.APK_HASH }}"
+              },
+              "exe": {
+                "file": "SanctissiMissa-Windows-v${VERSION}-build${BUILD}-x64.exe",
+                "sha256": "${{ env.EXE_HASH }}"
+              }
+            }
+          }
+          EOF
+
+          cat downloads/hashes.json
+
+      - name: Commit and push changes
+        run: |
+          git add downloads/ index.html
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "chore: Update downloads to v${{ github.event.inputs.version }} Build ${{ github.event.inputs.build_number }}"
+          git push
+
+      - name: Deploy to server
+        run: |
+          # Trigger deployment via SSH or webhook
+          # Option 1: Direct SSH deploy
+          # ssh deploy@192.168.0.126 "cd /var/www/sanctissimissa-infosite && ./deploy.sh"
+
+          # Option 2: Webhook trigger
+          curl -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" || true
