@@ -16,6 +16,34 @@ infrastructure/nginx/ssl/
 credentials.json
 service-account.json
 
+# === BUILD ARTIFACTS (generated, too large for GitHub) ===
+# Downloads - APK, EXE, MSI, AppImage, DMG, DEB, RPM
+downloads/*.apk
+downloads/*.exe
+downloads/*.msi
+downloads/*.AppImage
+downloads/*.dmg
+downloads/*.deb
+downloads/*.rpm
+downloads/*.7z
+downloads/*.zip
+
+# Also in domains folder
+domains/*/downloads/*.apk
+domains/*/downloads/*.exe
+domains/*/downloads/*.msi
+domains/*/downloads/*.AppImage
+domains/*/downloads/*.dmg
+domains/*/downloads/*.deb
+domains/*/downloads/*.rpm
+
+# WASM files (build outputs)
+*.wasm
+
+# Node modules and dist
+node_modules/
+dist/
+
 # === TEMPORARY/GENERATED FILES ===
 # OS files
 .DS_Store
@@ -28,18 +56,20 @@ Thumbs.db
 # Logs
 *.log
 
-# Build artifacts
-node_modules/
-dist/
-
 # Temporary files
 *.tmp
 *.temp
 
-# === DOCUMENTATION OF IGNORED ITEMS ===
-# See infrastructure/SERVER.md for server details
-# See infrastructure/shared-hosting/STACKCP.md for StackCP details
+# Backup files
+*.bak
+*.out_of_sync
+index.html.bak
+index.html.out_of_sync
 
-# Note: We track as much as possible in this private repo for
-# complete restore/migration capability. Only truly sensitive
-# items (SSL keys, passwords) are excluded.
+# === SSHFS MOUNT POINTS (not real files) ===
+HELLOWORD.ROBIN.MBA/
+SANCTISSIMISSA.ONLINE/
+
+# === DO NOT IGNORE MEDIA CONTENT ===
+# Media files (mp4, m4a, png, jpg, pdf) are CONTENT, not build artifacts
+# These should be tracked for complete restore capability

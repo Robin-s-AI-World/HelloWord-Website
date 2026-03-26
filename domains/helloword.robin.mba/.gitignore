@@ -1,0 +1,19 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*~
+
+# Logs
+*.log
+firebase-debug.log
+
+# Build artifacts
+node_modules/
+dist/
+
+# Temporary files
+*.tmp
+*.temp
