@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello, Word — The SanctissiMissa Project</title>
     <meta name="description" content="SanctissiMissa: Engineering a Digital Companion for the 1962 Extraordinary Form. Traditional Latin Mass application with complete Mass propers, liturgical calendar, and bilingual Latin/English texts.">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#B8860B">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -330,6 +336,7 @@
             .hero-title { font-size: 2.5rem !important; }
         }
     </style>
+    <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://*.robin.mba https://robin.mba http://*.sanctissimissa.online https://*.sanctissimissa.online http://sanctissimissa.online https://sanctissimissa.online;">
 </head>
 <body class="antialiased">
 
@@ -385,30 +392,81 @@
         <p class="text-lg sm:text-xl mb-2" style="color:var(--text-muted);">The SanctissiMissa Project</p>
         <p class="text-sm sm:text-base mb-6" style="color:var(--text-light);">Engineering a Digital Companion for the 1962 Extraordinary Form</p>
         <p class="text-sm mb-8" style="color:var(--text-muted);">
-            by <strong style="color:var(--text);">Robin L. M. Cheung, MBA</strong>
+            <img src="robin-poet.jpg" alt="Robin L. M. Cheung" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);vertical-align:middle;display:inline-block;margin-right:6px;" />by <strong style="color:var(--text);">Robin L. M. Cheung, MBA</strong>
             <span class="mx-2" style="color:var(--border);">|</span>
-            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">v0.1.0-alpha &middot; Build 66954</span>
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">v0.1.1-alpha &middot; Build 73029</span>
         </p>
-        <!-- Embedded App as Hero -->
-        <div style="position:relative; width:100%; max-width:420px; margin:0 auto; border-radius:2rem; overflow:hidden; box-shadow:0 12px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08); background:#0A0F1A;">
-            <div style="background:linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%); padding:10px 0 6px; text-align:center;">
-                <div style="width:36px; height:4px; border-radius:2px; background:rgba(255,255,255,0.15); margin:0 auto;"></div>
+        <!-- Embedded App as Hero — tablet mockup, infographic-first -->
+        <div id="app-showcase" style="position:relative; width:80%; max-width:1000px; margin:0 auto;">
+          <div id="tablet-shell" style="border-radius:1.4rem; border:3px solid rgba(255,255,255,0.15);
+               box-shadow:0 16px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+               background:#0A0F1A; overflow:hidden;">
+            <div style="background:#111827; padding:8px 0 6px; text-align:center; display:flex;
+                 align-items:center; justify-content:center; gap:8px;">
+              <div style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.12);"></div>
+              <div style="width:60px; height:6px; border-radius:3px; background:rgba(255,255,255,0.08);"></div>
             </div>
-            <iframe
-                src="http://192.168.0.126:18080"
-                style="width:100%; height:700px; border:none; display:block;"
+            
+            <iframe id="showcase-iframe"
+                src="https://sanctissimissa-app.robin.mba"
+                data-src="https://sanctissimissa-app.robin.mba"
+                style="width:100%; height:625px; border:none; display:block;"
                 title="SanctissiMissa Web App"
-                loading="eager"
-                allow="fullscreen"
-            ></iframe>
-            <div style="background:linear-gradient(0deg, #1a1a2e 0%, #0f0f1a 100%); padding:6px 0 10px; text-align:center;">
-                <div style="width:90px; height:4px; border-radius:2px; background:rgba(255,255,255,0.1); margin:0 auto;"></div>
+                allow="fullscreen">
+            </iframe>
+            <div style="background:#111827; padding:6px 0 8px; text-align:center;">
+              <div style="width:80px; height:5px; border-radius:3px; background:rgba(255,255,255,0.1); margin:0 auto;"></div>
             </div>
+          </div>
         </div>
+        <script>
+        
+        }
+        </script>
         <div class="flex flex-wrap justify-center gap-3 mt-6 mb-4">
-            <a href="http://192.168.0.126:18080" target="_blank" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--gold); color:#fff;">Open Full Screen</a>
-            <a href="#downloads" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
+            <a href="https://sanctissimissa-app.robin.mba" target="_blank" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--gold); color:#fff;">Open Full Screen</a>
+            <a href="https://sanctissimissa.online/downloads/sanctissimissa-android-apk-universal-release-v0.1.1-alpha.73016-signed.apk" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
         </div>
+        <!-- YouTube lightbox — Missa Lecta 2013 -->
+        <!-- YouTube thumbnail trigger -->
+        <div class="mt-6 mb-2 text-center">
+          <div onclick="openYTLightbox()" style="display:inline-block;position:relative;cursor:pointer;border-radius:10px;overflow:hidden;box-shadow:0 6px 32px rgba(0,0,0,0.5);max-width:480px;width:100%;" onmouseover="this.querySelector('.yt-play-btn').style.transform='scale(1.12)'" onmouseout="this.querySelector('.yt-play-btn').style.transform='scale(1)'">
+            <img src="https://img.youtube.com/vi/qWvaGBiEl9I/hqdefault.jpg"
+                 alt="Robin serves the Missa Lecta, 2013"
+                 style="width:100%;display:block;border-radius:10px;" />
+            <!-- dark overlay -->
+            <div style="position:absolute;inset:0;background:rgba(0,0,0,0.28);border-radius:10px;"></div>
+            <!-- YouTube-style play button -->
+            <div class="yt-play-btn" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:44px;background:#FF0000;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:transform .18s;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <!-- caption bar -->
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(transparent,rgba(0,0,0,0.75));text-align:left;">
+              <p style="color:#fff;font-size:0.8rem;margin:0;line-height:1.3;"><strong>Robin serves the <em>Missa Lecta</em></strong> &mdash; 2013</p>
+            </div>
+          </div>
+        </div>
+        <!-- YT lightbox overlay -->
+        <div id="yt-lightbox" onclick="closeYTLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;">
+          <div onclick="event.stopPropagation()" style="position:relative;width:min(90vw,900px);aspect-ratio:16/9;">
+            <iframe id="yt-iframe" src="" allow="autoplay;fullscreen" allowfullscreen
+              style="width:100%;height:100%;border:none;border-radius:8px;"></iframe>
+            <button onclick="closeYTLightbox()" style="position:absolute;top:-16px;right:-16px;width:36px;height:36px;border-radius:50%;background:#333;border:none;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#215;</button>
+          </div>
+        </div>
+        <script>
+        function openYTLightbox() {
+          var lb = document.getElementById('yt-lightbox');
+          document.getElementById('yt-iframe').src = 'https://www.youtube.com/embed/qWvaGBiEl9I?autoplay=1';
+          lb.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        }
+        function closeYTLightbox() {
+          document.getElementById('yt-iframe').src = '';
+          document.getElementById('yt-lightbox').style.display = 'none';
+          document.body.style.overflow = '';
+        }
+        </script>
         <div class="mt-4">
             <a href="#overview" class="inline-block" style="color:var(--gold); animation: bounce 2s infinite;">
                 <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
@@ -478,7 +536,7 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             <div class="pillar fade-in stagger-1" data-pillar="mass">
-                <div class="pillar-icon">&#9768;</div>
+                <div class="pillar-icon">&#10013;</div>
                 <div class="pillar-title">Mass Texts</div>
                 <p class="text-xs mt-1" style="color:var(--text-light);">Complete propers &amp; ordinary</p>
             </div>
@@ -529,7 +587,7 @@
 
             <!-- Tech Stack -->
             <div class="arch-tab-content active" id="arch-stack" style="padding-top:1.5rem;">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <div class="p-4" style="background:var(--bg-card-alt); border-radius:0.5rem;">
                         <h4 class="font-display font-bold gold-accent mb-2">Frontend</h4>
                         <p class="text-sm" style="color:var(--text-muted);">React 19 + TypeScript<br>Vite build system<br>Tailwind CSS<br>React Native Web</p>
@@ -966,19 +1024,32 @@
 <section id="downloads" class="section" style="background:var(--bg-card-alt);">
     <div class="max-w-6xl mx-auto">
         <h2 class="section-title fade-in" data-editable>Download Alpha Release</h2>
-        <p class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v0.1.0-alpha.66954</strong> &mdash; 20 March 2026.</p>
+        <p class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v0.1.1-alpha.73029</strong> &mdash; 24 March 2026.</p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
             <!-- Android APK — PRIMARY -->
             <div class="dl-card fade-in stagger-1" style="border:2px solid var(--gold); position:relative;">
                 <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:#fff; font-size:0.65rem; font-weight:700; padding:2px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Recommended</div>
                 <div class="text-3xl mb-3">&#128241;</div>
                 <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Android APK</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; Min Android 7.0</p>
-                <a href="https://github.com/Robin-s-AI-World/HelloWord/releases" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
+                <a href="https://sanctissimissa.online/downloads/sanctissimissa-android-apk-universal-release-v0.1.1-alpha.73016-signed.apk" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
                 <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
                 <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
                     <p style="line-height:1.6;">Open this page on your Android device, tap <strong>Download APK</strong>, then tap the downloaded file to install. If prompted, allow installation from your browser under <em>Settings &rarr; Install unknown apps</em>.</p>
+                </div>
+            </div>
+
+            
+            <!-- Windows EXE -->
+            <div class="dl-card fade-in stagger-2">
+                <div class="text-3xl mb-3">&#128187;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Windows App</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x64</p>
+                <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Windows-v0.1.1-alpha.73029-build73031-x64.exe" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;">Download .EXE</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle("open")">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <p style="line-height:1.6;">Download the .exe and run it directly. No installation required. If Windows SmartScreen appears, click "More info" and then "Run anyway".</p>
                 </div>
             </div>
 
@@ -987,7 +1058,7 @@
                 <div class="text-3xl mb-3">&#127760;</div>
                 <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Web App</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Try it in your browser</p>
-                <a href="http://192.168.0.126:18080" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;" target="_blank">Launch Web App</a>
+                <a href="https://sanctissimissa-app.robin.mba" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;" target="_blank">Launch Web App</a>
             </div>
 
             <!-- AppImage -->
@@ -1027,7 +1098,9 @@
             <h4 class="font-display font-bold mb-3" style="color:var(--gold);">SHA256 Checksums</h4>
             <div class="code-block" style="font-size:0.72rem; line-height:1.8;">
                 <span class="comment"># Verify your download:</span><br>
-                <span style="color:#A6E3A1;">3d012a21d41d3f6fb8761edaeb0c282a94c6f3b0</span>..  SanctissiMissa-Android-Alpha-17Mar2026.apk<br>
+                <span style="color:#A6E3A1;">26f6ff39bd4baae740522ff8eca3e716b025974cd6dbe962ef1dd8e5bd28a1ab</span>..  SanctissiMissa-Windows-v0.1.1-alpha.73029-build73031-x64.exe<br>
+
+                <span style="color:#A6E3A1;">0e57fbf29fc405b24abd5d4a72cbdff2632e6fe7756b4cb97eed5463c0f03f64</span>..  sanctissimissa-android-apk-universal-release-v0.1.1-alpha.73016-signed.apk<br>
                 <span style="color:#A6E3A1;">0c7618bf653420b1ae049910052cdcb2ffa14afe</span>..  SanctissiMissa-Linux-Alpha-17Mar2026.AppImage<br>
                 <span style="color:#A6E3A1;">1a7c159f7d6c868de5cbfc67d5bb50e1f02fd07c</span>..  SanctissiMissa-Linux-Alpha-17Mar2026.deb<br>
             </div>
@@ -1042,10 +1115,7 @@
 
         <div class="ornate ornate-lg p-6 md:p-10 fade-in" style="border-radius:0.5rem;">
             <div class="text-center mb-6">
-                <div class="inline-block w-24 h-24 rounded-full flex items-center justify-center text-3xl" style="background:var(--gold-glow); border:2px solid var(--gold); line-height:24px;">
-                    <span style="font-size:2.5rem;">&#9768;</span>
-                </div>
-            </div>
+                <img src="robin-poet.jpg" alt="Robin L. M. Cheung, MBA" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);display:inline-block;" /></div>
 
             <h3 class="font-display text-2xl font-bold text-center mb-6 crimson-accent">Robin L. M. Cheung, MBA</h3>
 
@@ -1054,7 +1124,11 @@
 
                 <p>Those years of reverent service planted a seed. The ancient liturgy&mdash;with its precision, its beauty, its unbroken connection to centuries of Catholic worship&mdash;demanded a digital companion worthy of its dignity. When Robin discovered <strong>Laszlo Kiss'</strong> extraordinary <em>DivinumOfficium</em> project (an MIT-licensed digital transcription of the complete traditional liturgical texts), he recognized an opportunity to build something that had never existed: a modern, offline-first, multi-platform application that could bring the complete Traditional Latin Mass to any device, anywhere in the world&mdash;without requiring an internet connection.</p>
 
-                <p>A software engineer by profession and a traditional Catholic by conviction, Robin brings both technical rigor and deep liturgical understanding to SanctissiMissa. The project's architecture reflects its subject matter: like the stone churches that have sheltered the faithful for centuries, the app is built to endure&mdash;with a complete 27.4 MB bilingual corpus bundled inside every installation, immune to server outages, subscription lapses, or internet disruptions.</p>
+                <p>A REALTOR-Broker by profession and a Catholic by conviction&mdash;though he would resist the label &ldquo;traditionalist.&rdquo; Robin is, by temperament, a <em>bridger of extremes</em>: he is either the most modernist of traditionalists or the most traditional of modernists, and he has never found the contradiction worth resolving. For most of his life&mdash;through his Conversion and well into the years he spent serving at the <em>Usus Antiquior</em> altar&mdash;he identified equally as a <strong>DJ and raver</strong>. By the time he took his place beside the sanctuary rail at St. Lawrence Martyr, he had largely retired from the circuit and returned to his first instrument, classical piano; yet the duality persisted, quietly. He brings the same instinct to SanctissiMissa: not to choose between the ancient and the modern, but to make them speak to each other.</p>
+
+                <p>That instinct has roots in an unlikely origin. Robin is an adult convert and the only Catholic in his immediate family. On his birthday in the <strong>Jubilee Year Anno Domini 2000</strong>&mdash;having just begun his MBA at the <strong>Michael G. DeGroote School of Business</strong>, McMaster University&mdash;he completed a hat trick of sacraments in a single celebration: <strong>Baptism, First Communion, and Confirmation</strong>, at the parish directly across Main Street West from the university gates in Hamilton, Ontario. He entered the Church alone, without family precedent.</p>
+
+                <p>Robin brings both the rigour of a builder and the instinct of a bridge-maker to SanctissiMissa. The project&rsquo;s architecture reflects its subject matter: like the stone churches that have sheltered the faithful for centuries, the app is built to endure&mdash;with a complete 27.4&nbsp;MB bilingual corpus bundled inside every installation, immune to server outages, subscription lapses, or internet disruptions.</p>
 
                 <p>SanctissiMissa is not merely a technical exercise. It is an act of service to the Church&mdash;an offering of modern engineering skill in support of ancient, unchanging worship. The name itself echoes this mission: <em>Sanctissima Missa</em>, the Most Holy Mass.</p>
             </div>
@@ -1074,7 +1148,7 @@
     <p class="text-xs" style="color:var(--text-light);">
         <a href="https://github.com/rebots-online/HelloWord" target="_blank" style="color:var(--gold);">GitHub</a>
         <span class="mx-2">&middot;</span>
-        v0.1.0-alpha.66954
+        v0.1.1-alpha.73029
         <span class="mx-2">&middot;</span>
         Liturgical texts derived from <a href="https://github.com/DivinumOfficium/divinum-officium" target="_blank" style="color:var(--gold);">DivinumOfficium</a> (MIT License)
     </p>
@@ -1159,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var pillarData = {
         mass: {
             title: 'Mass Texts',
-            icon: '&#9768;',
+            icon: '&#10013;',
             points: [
                 'Complete 1962 Roman Missal propers and ordinary',
                 'Bilingual Latin/English side-by-side display',
@@ -1439,7 +1513,7 @@ function openLightboxVideo(src, caption) {
     var overlay = document.getElementById('lightboxOverlay');
     var body = document.getElementById('lightboxBody');
     var cap = document.getElementById('lightboxCaption');
-    body.innerHTML = '<video controls autoplay style="max-width:90vw; max-height:85vh; border-radius:0.5rem; box-shadow:0 8px 60px rgba(0,0,0,0.5);"><source src="' + src + '" type="video/mp4"></video>';
+    body.innerHTML = '<video controls autoplay style="max-width:90vw; max-height:625px; border-radius:0.5rem; box-shadow:0 8px 60px rgba(0,0,0,0.5);"><source src="' + src + '" type="video/mp4"></video>';
     cap.textContent = caption || '';
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -1449,7 +1523,7 @@ function openLightboxImage(src, caption) {
     var overlay = document.getElementById('lightboxOverlay');
     var body = document.getElementById('lightboxBody');
     var cap = document.getElementById('lightboxCaption');
-    body.innerHTML = '<img src="' + src + '" alt="' + (caption || '') + '" style="max-width:90vw; max-height:85vh; border-radius:0.5rem; box-shadow:0 8px 60px rgba(0,0,0,0.5);">';
+    body.innerHTML = '<img src="' + src + '" alt="' + (caption || '') + '" style="max-width:90vw; max-height:625px; border-radius:0.5rem; box-shadow:0 8px 60px rgba(0,0,0,0.5);">';
     cap.textContent = caption || '';
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';

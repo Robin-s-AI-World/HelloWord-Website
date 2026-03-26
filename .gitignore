@@ -1,14 +1,32 @@
+# Copyright (C) 2025-2026 Robin L. M. Cheung, MBA. All rights reserved.
+
+# === TRULY SENSITIVE - NEVER TRACK ===
+# SSL certificates and private keys
+*.key
+*.pem (for certificates)
+*.crt
+*.cer
+infrastructure/nginx/ssl/
+
+# Secrets and credentials
+.env
+.env.*
+*.secret
+*_password*
+credentials.json
+service-account.json
+
+# === TEMPORARY/GENERATED FILES ===
 # OS files
 .DS_Store
 Thumbs.db
 
-# Editor
+# Editor swap files
 *.swp
 *~
 
 # Logs
 *.log
-firebase-debug.log
 
 # Build artifacts
 node_modules/
@@ -17,3 +35,11 @@ dist/
 # Temporary files
 *.tmp
 *.temp
+
+# === DOCUMENTATION OF IGNORED ITEMS ===
+# See infrastructure/SERVER.md for server details
+# See infrastructure/shared-hosting/STACKCP.md for StackCP details
+
+# Note: We track as much as possible in this private repo for
+# complete restore/migration capability. Only truly sensitive
+# items (SSL keys, passwords) are excluded.
