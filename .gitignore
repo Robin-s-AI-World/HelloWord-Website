@@ -73,3 +73,4 @@ SANCTISSIMISSA.ONLINE/
 # === DO NOT IGNORE MEDIA CONTENT ===
 # Media files (mp4, m4a, png, jpg, pdf) are CONTENT, not build artifacts
 # These should be tracked for complete restore capability
+downloads/
