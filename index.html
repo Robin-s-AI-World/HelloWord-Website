@@ -260,13 +260,48 @@
 
         /* === DOWNLOAD CARDS === */
         .dl-card {
-            border: 1px solid var(--border-light);
-            border-radius: 0.5rem;
+            border: none;
+            border-radius: 1rem;
             padding: 1.5rem;
-            background: var(--bg-card);
-            transition: all 0.2s;
+            background: linear-gradient(145deg, #2a2a3a, #1e1e2a);
+            box-shadow:
+                8px 8px 20px rgba(0,0,0,0.5),
+                -4px -4px 12px rgba(60,60,80,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
         }
-        .dl-card:hover { border-color: var(--gold); box-shadow: 0 4px 16px var(--gold-glow); }
+        .dl-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow:
+                12px 12px 28px rgba(0,0,0,0.6),
+                -6px -6px 16px rgba(60,60,80,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                0 0 30px rgba(184,134,11,0.3);
+        }
+        .dl-btn {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            border-radius: 0.6rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow:
+                4px 4px 10px rgba(0,0,0,0.4),
+                -2px -2px 6px rgba(255,255,255,0.05);
+        }
+        .dl-btn:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                6px 6px 14px rgba(0,0,0,0.5),
+                -3px -3px 8px rgba(255,255,255,0.08);
+        }
+        .dl-btn:active {
+            transform: translateY(1px);
+            box-shadow:
+                2px 2px 6px rgba(0,0,0,0.4),
+                -1px -1px 4px rgba(255,255,255,0.05);
+        }
 
         /* === ANIMATIONS === */
         @keyframes fadeUp {
@@ -895,6 +930,94 @@
     </div>
 </section>
 
+<!-- ==================== DOWNLOADS ==================== -->
+<section id="downloads" class="section" style="background:var(--bg-card-alt);">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="section-title fade-in" data-editable>Download Alpha Release</h2>
+        <p class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v2.17.76952</strong> &mdash; 27 March 2026.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+            <!-- Android APK — PRIMARY -->
+            <div class="dl-card fade-in stagger-1" style="border:2px solid var(--gold); position:relative;">
+                <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:#fff; font-size:0.65rem; font-weight:700; padding:2px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Recommended</div>
+                <div class="text-3xl mb-3">&#128241;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Android APK</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; Min Android 7.0</p>
+                <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Android-v2.16-release-signed.apk" class="dl-btn" style="background:var(--crimson); color:#fff;">Download APK</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <p style="line-height:1.6;">Open this page on your Android device, tap <strong>Download APK</strong>, then tap the downloaded file to install. If prompted, allow installation from your browser under <em>Settings &rarr; Install unknown apps</em>.</p>
+                </div>
+            </div>
+
+
+            <!-- Windows EXE -->
+            <div class="dl-card fade-in stagger-2">
+                <div class="text-3xl mb-3">&#128187;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Windows App</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x64 &middot; NSIS installer</p>
+                <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Windows-v2.14-build76944-x64.exe" class="dl-btn" style="background:var(--gold); color:#fff;">Download .EXE</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <p style="line-height:1.6;">Download the .exe and run it directly. No installation required. If Windows SmartScreen appears, click "More info" and then "Run anyway".</p>
+                </div>
+            </div>
+
+            <!-- Web PWA -->
+            <div class="dl-card fade-in stagger-2">
+                <div class="text-3xl mb-3">&#127760;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Web App</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Try it in your browser</p>
+                <a href="https://sanctissimissa-app.robin.mba" class="dl-btn" style="background:var(--gold); color:#fff;" target="_blank">Launch Web App</a>
+            </div>
+
+            <!-- AppImage -->
+            <div class="dl-card fade-in stagger-3">
+                <div class="text-3xl mb-3">&#128187;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux AppImage</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x86_64</p>
+                <a href="https://sanctissimissa.online/downloads/SanctissiMissa_0.2.14_amd64.AppImage" class="dl-btn" style="background:var(--gold); color:#fff;">Download AppImage</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
+                        chmod +x SanctissiMissa_0.2.14_amd64.AppImage<br>
+                        ./SanctissiMissa_0.2.14_amd64.AppImage
+                    </code>
+                </div>
+            </div>
+
+            <!-- DEB -->
+            <div class="dl-card fade-in stagger-4">
+                <div class="text-3xl mb-3">&#128230;</div>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux DEB</h4>
+                <p class="text-xs mb-3" style="color:var(--text-light);">Debian/Ubuntu &middot; x86_64</p>
+                <a href="https://sanctissimissa.online/downloads/SanctissiMissa_0.2.14_amd64.deb" class="dl-btn" style="background:var(--gold); color:#fff;">Download DEB</a>
+                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
+                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
+                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
+                        sudo dpkg -i SanctissiMissa_0.2.14_amd64.deb<br>
+                        sudo apt-get install -f  # Fix dependencies if needed<br>
+                        sanctissimissa
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHA256 Checksums -->
+        <div class="ornate p-4 fade-in" style="border-radius:0.5rem;">
+            <h4 class="font-display font-bold mb-3" style="color:var(--gold);">SHA256 Checksums</h4>
+            <div class="code-block" style="font-size:0.72rem; line-height:1.8;">
+                <span class="comment"># Verify your download:</span><br>
+                <span style="color:#A6E3A1;">0c865dfd841de7bf6e2dfa7f569d80081a7f0e2a44bb7446c3bff06288d84c5f</span>..  SanctissiMissa-Windows-v2.14-build76944-x64.exe<br>
+
+                <span style="color:#A6E3A1;">31eb2ef339b6ac8fa590f75ec60b5aedbee4a32133344d0d7ee68a0fcb07a244</span>..  SanctissiMissa-Android-v2.16-release-signed.apk<br>
+                <span style="color:#A6E3A1;">277ac9d89c255b1cd701c06dc9a31e5ae5f2ebf55e0050d95f0870d1c62f44c5</span>..  SanctissiMissa_0.2.14_amd64.AppImage<br>
+                <span style="color:#A6E3A1;">4404cedab14a3bd66c9ae20c0d8a3938a6c08b129965db66a521f538bb6b2fc2</span>..  SanctissiMissa_0.2.14_amd64.deb<br>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ==================== READING LIST ==================== -->
 <section id="reading-list" class="section">
     <div class="max-w-6xl mx-auto">
@@ -1016,94 +1139,6 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
-</section>
-
-<!-- ==================== DOWNLOADS ==================== -->
-<section id="downloads" class="section" style="background:var(--bg-card-alt);">
-    <div class="max-w-6xl mx-auto">
-        <h2 class="section-title fade-in" data-editable>Download Alpha Release</h2>
-        <p class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v2.17.76952</strong> &mdash; 27 March 2026.</p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-            <!-- Android APK — PRIMARY -->
-            <div class="dl-card fade-in stagger-1" style="border:2px solid var(--gold); position:relative;">
-                <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:#fff; font-size:0.65rem; font-weight:700; padding:2px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Recommended</div>
-                <div class="text-3xl mb-3">&#128241;</div>
-                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Android APK</h4>
-                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; Min Android 7.0</p>
-                <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Android-v0.2.5.76744-release-signed.apk" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
-                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
-                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
-                    <p style="line-height:1.6;">Open this page on your Android device, tap <strong>Download APK</strong>, then tap the downloaded file to install. If prompted, allow installation from your browser under <em>Settings &rarr; Install unknown apps</em>.</p>
-                </div>
-            </div>
-
-            
-            <!-- Windows EXE -->
-            <div class="dl-card fade-in stagger-2">
-                <div class="text-3xl mb-3">&#128187;</div>
-                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Windows App</h4>
-                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x64</p>
-                <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Windows-v0.2.8.76754-build76755-x64.exe" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;">Download .EXE</a>
-                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle("open")">&#9662; Install instructions</div>
-                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
-                    <p style="line-height:1.6;">Download the .exe and run it directly. No installation required. If Windows SmartScreen appears, click "More info" and then "Run anyway".</p>
-                </div>
-            </div>
-
-            <!-- Web PWA -->
-            <div class="dl-card fade-in stagger-2">
-                <div class="text-3xl mb-3">&#127760;</div>
-                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Web App</h4>
-                <p class="text-xs mb-3" style="color:var(--text-light);">Try it in your browser</p>
-                <a href="https://sanctissimissa-app.robin.mba" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;" target="_blank">Launch Web App</a>
-            </div>
-
-            <!-- AppImage -->
-            <div class="dl-card fade-in stagger-3">
-                <div class="text-3xl mb-3">&#128187;</div>
-                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux AppImage</h4>
-                <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x86_64</p>
-                <a href="https://sanctissimissa.online/downloads/SanctissiMissa_0.2.6_amd64.AppImage" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;">Download AppImage</a>
-                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
-                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
-                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
-                        chmod +x SanctissiMissa_0.2.6_amd64.AppImage<br>
-                        ./SanctissiMissa_0.2.6_amd64.AppImage
-                    </code>
-                </div>
-            </div>
-
-            <!-- DEB -->
-            <div class="dl-card fade-in stagger-4">
-                <div class="text-3xl mb-3">&#128230;</div>
-                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux DEB</h4>
-                <p class="text-xs mb-3" style="color:var(--text-light);">Debian/Ubuntu &middot; x86_64</p>
-                <a href="https://github.com/Robin-s-AI-World/HelloWord/releases" class="inline-block px-4 py-2 rounded text-sm font-semibold" style="background:var(--gold); color:#fff;">Download DEB</a>
-                <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
-                <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
-                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
-                        sudo dpkg -i SanctissiMissa_0.2.6_amd64.deb<br>
-                        sudo apt-get install -f  # Fix dependencies if needed<br>
-                        sanctissimissa
-                    </code>
-                </div>
-            </div>
-        </div>
-
-        <!-- SHA256 Checksums -->
-        <div class="ornate p-4 fade-in" style="border-radius:0.5rem;">
-            <h4 class="font-display font-bold mb-3" style="color:var(--gold);">SHA256 Checksums</h4>
-            <div class="code-block" style="font-size:0.72rem; line-height:1.8;">
-                <span class="comment"># Verify your download:</span><br>
-                <span style="color:#A6E3A1;">0c865dfd841de7bf6e2dfa7f569d80081a7f0e2a44bb7446c3bff06288d84c5f</span>..  SanctissiMissa-Windows-v2.14-build76944-x64.exe<br>
-
-                <span style="color:#A6E3A1;">31eb2ef339b6ac8fa590f75ec60b5aedbee4a32133344d0d7ee68a0fcb07a244</span>..  SanctissiMissa-Android-v2.16-release-signed.apk<br>
-                <span style="color:#A6E3A1;">277ac9d89c255b1cd701c06dc9a31e5ae5f2ebf55e0050d95f0870d1c62f44c5</span>..  SanctissiMissa_0.2.14_amd64.AppImage<br>
-                <span style="color:#A6E3A1;">4404cedab14a3bd66c9ae20c0d8a3938a6c08b129965db66a521f538bb6b2fc2</span>..  SanctissiMissa_0.2.14_amd64.deb<br>
-            </div>
         </div>
     </div>
 </section>
