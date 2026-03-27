@@ -2,7 +2,7 @@
   "name": "SanctissiMissa - Traditional Catholic Liturgy",
   "short_name": "SanctissiMissa",
   "description": "Traditional Latin Mass texts, Divine Office, liturgical calendar, personal journaling, and parish information for the Extraordinary Form of the Roman Rite.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "theme_color": "#152B63",
   "background_color": "#101622",
@@ -10,36 +10,36 @@
   "categories": ["education", "lifestyle", "utilities"],
   "lang": "en-US",
   "dir": "ltr",
-  "scope": "/",
+  "scope": "./",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "./icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "./icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-180x180.png",
+      "src": "./icons/icon-180x180.png",
       "sizes": "180x180",
       "type": "image/png"
     }
   ],
   "screenshots": [
     {
-      "src": "/screenshots/desktop-screenshot.png",
+      "src": "./screenshots/desktop-screenshot.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Desktop view of liturgical calendar"
     },
     {
-      "src": "/screenshots/mobile-screenshot.png",
+      "src": "./screenshots/mobile-screenshot.png",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
@@ -51,10 +51,10 @@
       "name": "Today's Liturgy",
       "short_name": "Today",
       "description": "View today's Mass and Office texts",
-      "url": "/today",
+      "url": "./today",
       "icons": [
         {
-          "src": "/icons/calendar-shortcut.png",
+          "src": "./icons/calendar-shortcut.png",
           "sizes": "96x96"
         }
       ]
@@ -63,10 +63,10 @@
       "name": "Journal",
       "short_name": "Journal",
       "description": "Personal liturgical journal",
-      "url": "/journal",
+      "url": "./journal",
       "icons": [
         {
-          "src": "/icons/journal-shortcut.png",
+          "src": "./icons/journal-shortcut.png",
           "sizes": "96x96"
         }
       ]
