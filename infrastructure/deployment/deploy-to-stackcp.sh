@@ -2,7 +2,7 @@
 # Copyright (C) 2025-2026 Robin L. M. Cheung, MBA. All rights reserved.
 #
 # Deploy to sanctissimissa.online (StackCP shared hosting)
-# Note: StackCP uses SFTP, not rsync
+# Note: rsync over SSH is available and works (confirmed 2026-04-08)
 #
 # Usage: ./deploy-to-stackcp.sh
 
@@ -18,21 +18,18 @@ NC='\033[0m'
 
 log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 
-log_info "Deploying to sanctissimissa.online via SFTP..."
+log_info "Deploying to sanctissimissa.online via rsync over SSH..."
 
-# Use sftp for upload (rsync not available on StackCP)
-sftp -b - ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
-cd /home/sites/15b/9/9460530f84/sanctissimissa.online
-
-# Upload main files
-put index.html
-put status.html
-put robin-poet.jpg
-put Sanctissimissa-Infographic-18mar2026.png
-
-# Upload directories
-put -r downloads
-put -r Technical-HowItWorks
-EOF
+rsync -avz --delete \
+    --exclude '.git' \
+    --exclude 'infrastructure' \
+    --exclude 'domains' \
+    --exclude 'HELLOWORD.ROBIN.MBA' \
+    --exclude 'SANCTISSIMISSA.ONLINE' \
+    --exclude 'DOCS' \
+    --exclude 'CHECKLIST.md' \
+    --exclude '*.log' \
+    --exclude 'node_modules' \
+    ./ ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/
 
 log_info "Deployed to sanctissimissa.online"

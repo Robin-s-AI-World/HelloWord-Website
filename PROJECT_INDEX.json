@@ -1,0 +1,271 @@
+{
+  "_parity_notice": "This file is paired with PROJECT_INDEX.md in the same directory. Both files MUST agree on meta.generated, meta.version, file_counts, and gotchas[]. If they diverge, treat both as suspect and regenerate from source via /sc:index-repo. See user global CLAUDE.md → Paired Index Integrity Rules.",
+  "_canonical_cross_references": {
+    "ci_runner_topology": "~/forgejo/VE-forgejo-runners/README.md",
+    "upstream_artifact_contract": "DOCS/CROSS-REPO-CONTRACTS.md",
+    "global_runner_policy": "~/.claude/CLAUDE.md (CI / Self-Hosted Runners)",
+    "naming_conventions": "~/.claude/CONVENTIONS.md"
+  },
+  "meta": {
+    "name": "HelloWord-Website",
+    "display_name": "SanctissiMissa Infosite",
+    "generated": "2026-04-08",
+    "generator": "/sc:index-repo",
+    "version": "v2.33 Build 92878",
+    "version_source": "index.html:8-9 (SITE_CONFIG.version + SITE_CONFIG.build)",
+    "version_source_history": "Previously index.html:432 hardcoded span; refactored into SITE_CONFIG by Windsurf 2026-04-08",
+    "repo_type": "static-html-site",
+    "build_step": "none",
+    "license": "Copyright (C) 2025-2026 Robin L. M. Cheung, MBA — Private",
+    "private": true
+  },
+  "overview": {
+    "purpose": "Public-facing landing page and documentation for SanctissiMissa, a 1962 Traditional Latin Mass digital companion. Also vendors infrastructure-as-docs (nginx confs, deploy scripts, runbooks) for the self-hosted nginx LXC at 192.168.0.126.",
+    "tech": ["HTML5", "Tailwind CSS (CDN)", "Chart.js (CDN)", "Google Fonts (CDN)", "Vanilla JS", "SITE_CONFIG-driven population"],
+    "deployment_targets": [
+      {"domain": "helloword.robin.mba", "host": "LXC 192.168.0.126:18081", "config": "infrastructure/nginx/conf.d/sanctissimissa-infosite.conf"},
+      {"domain": "sanctissimissa-app.robin.mba", "host": "LXC 192.168.0.126", "config": "infrastructure/nginx/conf.d/sanctissimissa-app.conf"},
+      {"domain": "sanctissimissa.online", "host": "StackCP shared hosting", "config": "external"}
+    ]
+  },
+  "concurrent_architect_work": {
+    "agent": "Windsurf-Claude",
+    "task": "Deduplicate Config, Fix CSP/YouTube, Audit Downloads (SITE_CONFIG refactor)",
+    "status": "Tasks 1-7, 9, 10 complete as of 2026-04-08; tasks 8, 11, 12 pending",
+    "files": {
+      "checklist": "CHECKLIST.md",
+      "architecture": "DOCS/ARCHITECTURE/dedup-csp-youtube-downloads.md",
+      "contract": "DOCS/CROSS-REPO-CONTRACTS.md"
+    },
+    "primary_outcome": "All hardcoded version/URL/hash literals in index.html refactored into a single SITE_CONFIG JS block at index.html:7-33. Anything that previously regex-patched hardcoded strings in index.html (e.g., the CI workflow) is now broken — see gotcha #7."
+  },
+  "entry_points": {
+    "web_primary": "index.html",
+    "web_status": "status.html",
+    "web_legal": "privacy-policy.html",
+    "config_source_of_truth": "index.html:7-33 (SITE_CONFIG block)",
+    "pwa_manifest": "manifest.json",
+    "deploy_canonical": "infrastructure/deployment/deploy-to-lxc.sh",
+    "deploy_stackcp": "infrastructure/deployment/deploy-to-stackcp.sh",
+    "deploy_nginx": "infrastructure/deployment/sync-nginx-to-server.sh",
+    "ci_workflow": ".github/workflows/update-downloads.yml"
+  },
+  "ci_and_runners": {
+    "_canonical": "~/forgejo/VE-forgejo-runners/README.md",
+    "summary": "Self-hosted Forgejo Actions runner. NOT on 192.168.0.126 (nginx LXC) and NOT on 192.168.0.83 (failed github runner install). Runs in LXC CT 124 as forgejo-runner.robin.mba.",
+    "labels_registered": ["linux-amd64", "android", "windows-x64-cross"],
+    "label_syntax_note": "Forgejo Actions uses BARE labels (runs-on: linux-amd64), NOT GitHub Actions wrapping (runs-on: [self-hosted, linux-amd64]).",
+    "workflow_directory_convention": ".forgejo/workflows/ (per HelloWord and DeepScriber sibling repos)",
+    "forgejo_remote": "https://git.robin.mba/rcheung/HelloWord-Website.git",
+    "forgejo_remote_status": "blank, initial push pending",
+    "github_remote_status": "currently authoritative; needs to be removed",
+    "pat_env_vars": {
+      "github": "$GITHUB_API_KEY",
+      "forgejo": "$FORGEJO_API_KEY"
+    },
+    "forgejo_project_secret_needed": "FORGEJO_API_KEY"
+  },
+  "root_files": [
+    {"path": "index.html", "lines": 1740, "purpose": "Landing page; Tailwind CDN + Chart.js; SITE_CONFIG block at lines 7-33 is the version source of truth"},
+    {"path": "status.html", "lines": 55, "purpose": "CI/CD status dashboard"},
+    {"path": "privacy-policy.html", "lines": 253, "purpose": "App store privacy policy (off-brand styling — see gotcha #4); untracked"},
+    {"path": "manifest.json", "purpose": "PWA manifest, theme #B8860B"},
+    {"path": "deploy-to-lxc.sh", "purpose": "LEGACY — duplicated at infrastructure/deployment/ (gotcha #1)"},
+    {"path": "README.md", "lines": 379, "purpose": "Restore/migration runbook"},
+    {"path": "CHECKLIST.md", "lines": 39, "purpose": "Windsurf architect-mode task contract; untracked"},
+    {"path": ".gitignore", "purpose": "Excludes secrets, .key, .env*, downloads/*.{apk,exe,msi,...}, sshfs mount points"}
+  ],
+  "media_assets_root": [
+    {"file": "robin-poet.jpg", "bytes": 46118, "use": "Author headshot"},
+    {"file": "Sanctissimissa-Infographic-18mar2026.png", "bytes": 5247553, "use": "Architecture diagram"},
+    {"file": "AI__The_New_Blueprint.mp4", "bytes": 35285241, "use": "Vision video"},
+    {"file": "AI_agents_build_the_1962_Latin_Mass.m4a", "bytes": 36724332, "use": "AI-generated podcast"}
+  ],
+  "staged_release_artifacts_downloads": {
+    "_status": "staged but NOT yet uploaded to sanctissimissa.online (CHECKLIST task 8 pending)",
+    "_gitignored": true,
+    "version": "v2.33 build 92878",
+    "files": [
+      {"file": "SanctissiMissa-Android-v2.33-release-signed.apk", "bytes": 130006493, "type": "android-apk"},
+      {"file": "SanctissiMissa_0.2.33_amd64.AppImage", "bytes": 99203576, "type": "linux-appimage"},
+      {"file": "SanctissiMissa_0.2.33_amd64.deb", "bytes": 26635406, "type": "linux-deb"},
+      {"file": "SanctissiMissa-Windows-v2.33-build92878-x64.exe", "bytes": 20082905, "type": "windows-exe"}
+    ],
+    "total_bytes": 275928380,
+    "filename_patterns_canonical": "DOCS/CROSS-REPO-CONTRACTS.md"
+  },
+  "directories": {
+    "DOCS/": {
+      "_owner": "Windsurf-Claude (architect mode)",
+      "files": ["ARCHITECTURE/dedup-csp-youtube-downloads.md", "CROSS-REPO-CONTRACTS.md"]
+    },
+    "icons/": {"file_count": 4, "files": ["favicon.svg", "favicon-32x32.png", "apple-touch-icon.png", "icon-192x192.png"]},
+    "Technical-HowItWorks/": {"file_count": 8, "purpose": "Large media files: videos, PDFs, infographics", "notable": ["The_Architecture_Upgrade__SanctissiMissa.mp4", "Taming_the_Agentic_Coder.pdf"]},
+    "domains/helloword.robin.mba/": {"purpose": "READ-ONLY mirror of deployed info site", "key_files": ["index.html", "status.html", "robin-poet.jpg", "Sanctissimissa-Infographic-18mar2026.png", "Technical-HowItWorks/"]},
+    "domains/sanctissimissa-app.robin.mba/": {
+      "purpose": "READ-ONLY mirror of deployed PWA",
+      "key_files": [
+        "index.html (1,197 bytes — PWA shell)",
+        "liturgical.db (27,377,664 bytes — SQLite, Mass propers + calendar)",
+        "sql-wasm.js (46,406 bytes — SQL.js runtime)",
+        "manifest.json"
+      ],
+      "subdirs": {
+        "assets/": {"file_count": 8, "purpose": "Hashed Vite-style JS/CSS bundles"},
+        "icons/": {"file_count": 8, "purpose": "PWA icons + shortcut icons"},
+        "plugins/situ-design/": {"file_count": 4, "purpose": "Bundled plugin chunks"}
+      }
+    },
+    "infrastructure/": {
+      "subdirs": {
+        "api/": ["RELEASE_API.md"],
+        "deployment/": ["deploy-to-lxc.sh", "deploy-to-stackcp.sh", "sync-nginx-to-server.sh"],
+        "nginx/": {"nginx.conf": true, "conf.d/": "17 .conf files", "snippets/": ["proxy-params.conf"]},
+        "nginx-ui/": ["CREDENTIALS.md", "NGINX-UI-SYNC.md"],
+        "proxmox/": ["LXC-nginx-ui.md"],
+        "shared-hosting/": ["STACKCP.md (updated 2026-04-08 by Windsurf to v2.33 filenames)"]
+      },
+      "top_level_docs": ["SERVER.md"]
+    }
+  },
+  "nginx_configs": [
+    {"file": "00-upgrade-map.conf", "purpose": "Shared WebSocket upgrade map"},
+    {"file": "sanctissimissa-infosite.conf", "domain": "helloword.robin.mba", "purpose": "This repo's landing page"},
+    {"file": "sanctissimissa-app.conf", "domain": "sanctissimissa-app.robin.mba", "purpose": "Web App PWA"},
+    {"file": "git.conf", "domain": "git.robin.mba", "purpose": "Forgejo"},
+    {"file": "n8n.conf", "domain": "n8n.robin.mba", "purpose": "n8n automation"},
+    {"file": "draw.conf", "domain": "draw.robin.mba", "purpose": "Draw.io"},
+    {"file": "apisms.conf", "domain": "apisms.robin.mba", "purpose": "SMS gateway"},
+    {"file": "searxng.conf", "domain": "searxng.robin.mba", "purpose": "Search"},
+    {"file": "paper.conf", "domain": "paper.robin.mba", "purpose": "Paperless-ngx"},
+    {"file": "paperless.conf", "domain": "(paperless)", "purpose": "Paperless variant"},
+    {"file": "odoo.conf", "domain": "odoo.robin.mba", "purpose": "ERP"},
+    {"file": "missa.conf", "domain": "missa.robin.mba", "purpose": "Redirect"},
+    {"file": "tuba.conf", "domain": "tuba.robin.mba", "purpose": "Mastodon client"},
+    {"file": "umbrel.conf", "domain": "umbrel.robin.mba", "purpose": "Umbrel"},
+    {"file": "npmplus.conf", "purpose": "Reverse proxy management"},
+    {"file": "robins-courses.conf", "purpose": "Courses site"},
+    {"file": "strapi.conf", "purpose": "Strapi CMS"}
+  ],
+  "ci": {
+    "workflow": ".github/workflows/update-downloads.yml",
+    "triggers": {
+      "repository_dispatch": ["update-downloads", "new-release"],
+      "workflow_dispatch": {
+        "inputs": ["version", "build_number", "apk_url", "exe_url", "apk_hash", "exe_hash"]
+      }
+    },
+    "runner": "ubuntu-latest",
+    "runner_compliant": false,
+    "runner_violation": "Global CLAUDE.md mandates self-hosted runners. Should be runs-on: linux-amd64 (bare label, Forgejo Actions syntax). See gotcha #2.",
+    "patch_logic_status": "BROKEN — see gotcha #7. The sed patterns target hardcoded strings that no longer exist post-Windsurf SITE_CONFIG refactor.",
+    "actions": [
+      "download new APK/EXE from input URLs",
+      "compute SHA256 of each artifact",
+      "sed-patch hardcoded version + download links in index.html (NO LONGER MATCHES — gotcha #7)",
+      "write downloads/hashes.json",
+      "git commit + push",
+      "POST to DEPLOY_WEBHOOK_URL"
+    ]
+  },
+  "versioning": {
+    "format": "v{MAJOR}.{MINOR}.{BUILD}",
+    "current": "v2.33 Build 92878",
+    "build_formula": "(epoch % 100) * 1000 + minutes_past_hour",
+    "source_of_truth": "index.html:8-9 (SITE_CONFIG.version + SITE_CONFIG.build) — refactored from index.html:432 by Windsurf 2026-04-08",
+    "upstream_contract": "DOCS/CROSS-REPO-CONTRACTS.md (HelloWord → HelloWord-Website filename + version pattern)"
+  },
+  "gotchas": [
+    {
+      "id": 1,
+      "title": "Two deploy-to-lxc.sh files",
+      "severity": "medium",
+      "detail": "Root-level ./deploy-to-lxc.sh is the legacy version; README references infrastructure/deployment/deploy-to-lxc.sh as canonical. They differ in argument handling.",
+      "fix": "Pick one and delete the other to prevent drift."
+    },
+    {
+      "id": 2,
+      "title": "GitHub workflow uses hosted runner — needs full migration to .forgejo/workflows/",
+      "severity": "high",
+      "file": ".github/workflows/update-downloads.yml",
+      "line": 29,
+      "detail": "runs-on: ubuntu-latest violates user global CLAUDE.md (All CI runs on self-hosted runners. GitHub-hosted runners are not used). The file should also move from .github/workflows/ to .forgejo/workflows/ per sibling-repo convention (HelloWord, DeepScriber). Forgejo Actions uses bare labels.",
+      "fix": "git mv .github/workflows/update-downloads.yml .forgejo/workflows/update-downloads.yml; change runs-on: ubuntu-latest → runs-on: linux-amd64; change secrets.PAT_TOKEN → secrets.FORGEJO_API_KEY; change git config user to Forgejo CI <ci@git.robin.mba>. Do this in the same change as gotcha #7."
+    },
+    {
+      "id": 3,
+      "title": "PROJECT_INDEX requires manual refresh",
+      "severity": "low",
+      "detail": "No CI hook updates this pair when index.html or version changes. Past versions of this index showed 0.1.1-alpha while live site was many releases ahead.",
+      "fix": "Either add an index update step to whatever process bumps version, or accept that the index is regenerated on demand via /sc:index-repo."
+    },
+    {
+      "id": 4,
+      "title": "privacy-policy.html styling diverges from brand — linked from landing page footer; still untracked",
+      "severity": "medium",
+      "file": "privacy-policy.html",
+      "detail": "Uses purple gradient (#667eea → #764ba2) instead of the parchment/gold/crimson palette of index.html. Looks like an unedited template. index.html:1266 links to it from the footer, so this off-brand page IS reachable from production. File is also still untracked (?? in git status).",
+      "fix": "Re-skin to match landing page theme (parchment/gold/crimson), then git add."
+    },
+    {
+      "id": 5,
+      "title": "domains/ is a snapshot, not source",
+      "severity": "high",
+      "detail": "Files under domains/helloword.robin.mba/ and domains/sanctissimissa-app.robin.mba/ are READ-ONLY mirrors of production. Editing them does nothing.",
+      "fix": "Edit index.html at the repo root and deploy via infrastructure/deployment/deploy-to-lxc.sh."
+    },
+    {
+      "id": 6,
+      "title": "No build step / no package.json — ignore Vercel/Next.js hook suggestions",
+      "severity": "medium",
+      "detail": "This is intentionally a static site loading Tailwind/Chart.js/fonts via CDN. No package.json, no .vercel/, no .env. Plugin hooks (chrome-devtools, vercel, etc.) may auto-suggest vercel:bootstrap, vercel:workflow, vercel:deployments-cicd based on filename matches when reading workflow or README files. None apply here. Deployment is self-hosted nginx LXC per global CLAUDE.md.",
+      "fix": "Do not introduce a build pipeline or Vercel integration without explicit user consent."
+    },
+    {
+      "id": 7,
+      "title": "CI workflow sed patterns are stale post-SITE_CONFIG refactor",
+      "severity": "high",
+      "file": ".github/workflows/update-downloads.yml",
+      "lines": [80, 83, 84],
+      "detail": "The workflow uses sed -i to regex-patch hardcoded strings in index.html: data-version=\"…\", sanctissimissa-android-apk-…\\.apk, SanctissiMissa-Windows-…\\.exe. After Windsurf's SITE_CONFIG refactor (CHECKLIST tasks 1-7, completed 2026-04-08), those hardcoded strings no longer exist — they live inside the SITE_CONFIG JS block at index.html:7-33. The next workflow trigger will silently no-op the version bump.",
+      "fix": "Rewrite the workflow's update step to patch SITE_CONFIG.version, SITE_CONFIG.build, and SITE_CONFIG.artifacts.{apk,exe,appimage,deb}.{file,sha256} fields directly. Address in the same change as gotcha #2."
+    }
+  ],
+  "file_counts": {
+    "html_pages_root": 3,
+    "markdown_docs_total": 11,
+    "nginx_conf_files": 17,
+    "deployment_scripts_canonical": 3,
+    "deployment_scripts_legacy_at_root": 1,
+    "github_workflows": 1,
+    "forgejo_workflows": 0,
+    "icons_root": 4,
+    "synced_domain_mirrors": 2,
+    "staged_release_artifacts": 4,
+    "architect_mode_docs": 2,
+    "gotchas_tracked": 7
+  },
+  "quick_start": {
+    "local_preview": ["python3 -m http.server 8080", "npx serve ."],
+    "deploy_lxc": "./infrastructure/deployment/deploy-to-lxc.sh helloword",
+    "deploy_stackcp": "./infrastructure/deployment/deploy-to-stackcp.sh",
+    "deploy_nginx_confs": "./infrastructure/deployment/sync-nginx-to-server.sh"
+  },
+  "related_docs": [
+    "README.md",
+    "CHECKLIST.md",
+    "DOCS/ARCHITECTURE/dedup-csp-youtube-downloads.md",
+    "DOCS/CROSS-REPO-CONTRACTS.md",
+    "infrastructure/SERVER.md",
+    "infrastructure/api/RELEASE_API.md",
+    "infrastructure/shared-hosting/STACKCP.md",
+    "infrastructure/nginx-ui/NGINX-UI-SYNC.md",
+    "infrastructure/nginx-ui/CREDENTIALS.md",
+    "infrastructure/proxmox/LXC-nginx-ui.md"
+  ],
+  "external_canonical_sources": [
+    "~/forgejo/VE-forgejo-runners/README.md (CI runner topology, IPs, container, label strings)",
+    "~/.claude/CLAUDE.md (global runner policy, namespace conventions, PAT env-var naming)",
+    "~/.claude/CONVENTIONS.md (naming SOP, always-loaded companion doc)"
+  ]
+}

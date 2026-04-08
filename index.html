@@ -3,6 +3,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script>
+    var SITE_CONFIG = {
+        version: '2.33',
+        build: '92878',
+        releaseDate: '7 April 2026',
+        youtubeVideoId: 'YAgsf998UMc',
+        youtubeStartSec: 5,
+        downloadBaseUrl: 'https://sanctissimissa.online/downloads',
+        webAppUrl: 'https://sanctissimissa-app.robin.mba',
+        artifacts: {
+            apk:      { file: 'SanctissiMissa-Android-v2.33-release-signed.apk',       sha256: '98d1bf43851bbf9bd88f06b8f2fcac439e0752ebf94835a30dea8dcf9b8eeca9' },
+            exe:      { file: 'SanctissiMissa-Windows-v2.33-build92878-x64.exe',        sha256: 'bd3a64c5530b1e02b28858196ea34c729983154c914099de13ed8696c34a7e20' },
+            appimage: { file: 'SanctissiMissa_0.2.33_amd64.AppImage',                   sha256: '2811d5d2aca67d37e0ec463b0978fb352d328ccbb6975a36e3ad1d195e9a8efe' },
+            deb:      { file: 'SanctissiMissa_0.2.33_amd64.deb',                        sha256: '50c454d191f01903393d9a53bea8d8743d3bd5f1c234eb1d099fc74376d41ded' }
+        },
+        changelog: [
+            { version: '2.33', build: '92878', date: '2026-04-07', notes: [
+                'All platforms rebuilt: Android APK/AAB, Linux AppImage/DEB, Windows EXE (NSIS)',
+                'Windows cross-compile via cargo-xwin + NSIS on Linux'
+            ]},
+            { version: '2.31', build: '79001', date: '2026-04-06', notes: [
+                'Namespace migration: com.sanctissimissa.app \u2192 mba.robin.helloword',
+                'Firebase SHA automation + canonical Android build path',
+                'CI/CD migrated from GitHub Actions to Forgejo Actions'
+            ]},
+            { version: '2.29', build: '78374', date: '2026-03-28', notes: ['Previous alpha release (old namespace \u2014 do not install)'] }
+        ]
+    };
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello, Word — The SanctissiMissa Project</title>
     <meta name="description" content="SanctissiMissa: Engineering a Digital Companion for the 1962 Extraordinary Form. Traditional Latin Mass application with complete Mass propers, liturgical calendar, and bilingual Latin/English texts.">
@@ -102,6 +131,48 @@
         .nav-link:hover, .nav-link.active {
             color: var(--gold);
             border-bottom-color: var(--gold);
+        }
+        .nav-btn-download {
+            background: linear-gradient(180deg, var(--crimson) 0%, #8b1a1a 100%);
+            color: #fff !important;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border: none;
+            border-bottom: 3px solid #5a0f0f;
+            box-shadow: 0 2px 8px rgba(139,26,26,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+            transition: transform 0.1s, box-shadow 0.1s;
+            text-decoration: none;
+        }
+        .nav-btn-download:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(139,26,26,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+            color: #fff !important;
+        }
+        .nav-btn-download:active {
+            transform: translateY(1px);
+            border-bottom-width: 1px;
+            box-shadow: 0 1px 4px rgba(139,26,26,0.3);
+        }
+        .nav-btn-app {
+            color: var(--gold) !important;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 6px;
+            border: 1.5px solid var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: background 0.15s, color 0.15s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .nav-btn-app:hover {
+            background: var(--gold);
+            color: #fff !important;
         }
 
         /* === ORNATE BORDER === */
@@ -371,16 +442,17 @@
             .hero-title { font-size: 2.5rem !important; }
         }
     </style>
-    <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://*.robin.mba https://robin.mba http://*.sanctissimissa.online https://*.sanctissimissa.online http://sanctissimissa.online https://sanctissimissa.online;">
 </head>
 <body class="antialiased">
 
 <!-- ==================== NAVIGATION ==================== -->
 <nav class="nav-bar" id="navbar">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-        <a href="#hero" class="font-display text-xl font-bold gold-accent" style="letter-spacing:0.02em;">SanctissiMissa</a>
-        <!-- Desktop Nav -->
-        <div class="hidden lg:flex items-center gap-6">
+        <a href="#hero" class="font-display text-xl font-bold gold-accent flex-shrink-0" style="letter-spacing:0.02em;">SanctissiMissa</a>
+
+        <!-- Full Desktop Nav (xl+) -->
+        <div class="hidden xl:flex items-center gap-4 ml-6">
+            <a href="#app-showcase" class="nav-btn-app" onclick="scrollToApp(event)">&#9654; Launch App</a>
             <a href="#overview" class="nav-link" data-nav="overview">Overview</a>
             <a href="#features" class="nav-link" data-nav="features">Features</a>
             <a href="#architecture" class="nav-link" data-nav="architecture">Architecture</a>
@@ -388,19 +460,28 @@
             <a href="#blog" class="nav-link" data-nav="blog">Blog</a>
             <a href="#media" class="nav-link" data-nav="media">Media</a>
             <a href="#reading-list" class="nav-link" data-nav="reading-list">Reading List</a>
-            <a href="#downloads" class="nav-link" data-nav="downloads">Downloads</a>
+            <a href="#downloads" class="nav-btn-download" data-nav="downloads">&#11015; Downloads</a>
             <a href="#about" class="nav-link" data-nav="about">About</a>
-            <button id="themeToggle" class="ml-2 p-2 rounded-full hover:bg-[var(--gold-glow)] transition" title="Toggle theme" aria-label="Toggle theme">
+            <button id="themeToggle" class="ml-1 p-2 rounded-full hover:bg-[var(--gold-glow)] transition" title="Toggle theme" aria-label="Toggle theme">
                 <span id="themeIcon" style="font-size:1.2rem;">&#9790;</span>
             </button>
         </div>
-        <!-- Mobile Hamburger -->
-        <button id="hamburger" class="lg:hidden p-2" aria-label="Menu">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-        </button>
+
+        <!-- Compact always-visible trio + hamburger (below xl) -->
+        <div class="flex xl:hidden items-center gap-2 sm:gap-3">
+            <a href="#app-showcase" class="nav-btn-app" onclick="scrollToApp(event)" style="font-size:0.7rem;padding:4px 10px;">&#9654; Launch</a>
+            <a href="#downloads" class="nav-btn-download" style="font-size:0.7rem;padding:4px 10px;">&#11015; Downloads</a>
+            <a href="#about" class="nav-link" style="font-size:0.7rem;">About</a>
+            <button id="themeToggleCompact" class="p-2 rounded-full hover:bg-[var(--gold-glow)] transition xl:hidden" title="Toggle theme" aria-label="Toggle theme">
+                <span id="themeIconCompact" style="font-size:1.1rem;">&#9790;</span>
+            </button>
+            <button id="hamburger" class="p-2" aria-label="Menu">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            </button>
+        </div>
     </div>
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="mobile-menu lg:hidden px-4 pb-4">
+    <!-- Mobile/Tablet Menu (below xl) -->
+    <div id="mobileMenu" class="mobile-menu xl:hidden px-4 pb-4">
         <div class="flex flex-col gap-2">
             <a href="#overview" class="nav-link block py-2" onclick="closeMobile()">Overview</a>
             <a href="#features" class="nav-link block py-2" onclick="closeMobile()">Features</a>
@@ -409,9 +490,6 @@
             <a href="#blog" class="nav-link block py-2" onclick="closeMobile()">Blog</a>
             <a href="#media" class="nav-link block py-2" onclick="closeMobile()">Media</a>
             <a href="#reading-list" class="nav-link block py-2" onclick="closeMobile()">Reading List</a>
-            <a href="#downloads" class="nav-link block py-2" onclick="closeMobile()">Downloads</a>
-            <a href="#about" class="nav-link block py-2" onclick="closeMobile()">About</a>
-            <button onclick="toggleTheme(); closeMobile();" class="nav-link block py-2 text-left">Toggle Theme</button>
         </div>
     </div>
 </nav>
@@ -429,7 +507,7 @@
         <p class="text-sm mb-8" style="color:var(--text-muted);">
             <img src="robin-poet.jpg" alt="Robin L. M. Cheung" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);vertical-align:middle;display:inline-block;margin-right:6px;" />by <strong style="color:var(--text);">Robin L. M. Cheung, MBA</strong>
             <span class="mx-2" style="color:var(--border);">|</span>
-            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">v2.17 &middot; Build 76952</span>
+            <span id="cfg-version-hero" class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">v2.17 &middot; Build 76952</span>
         </p>
         <!-- Embedded App as Hero — tablet mockup, infographic-first -->
         <div id="app-showcase" style="position:relative; width:80%; max-width:1000px; margin:0 auto;">
@@ -443,8 +521,8 @@
             </div>
             
             <iframe id="showcase-iframe"
-                src="https://sanctissimissa-app.robin.mba"
-                data-src="https://sanctissimissa-app.robin.mba"
+                src="about:blank"
+                data-src="about:blank"
                 style="width:100%; height:625px; border:none; display:block;"
                 title="SanctissiMissa Web App"
                 allow="fullscreen">
@@ -459,14 +537,14 @@
         }
         </script>
         <div class="flex flex-wrap justify-center gap-3 mt-6 mb-4">
-            <a href="https://sanctissimissa-app.robin.mba" target="_blank" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--gold); color:#fff;">Open Full Screen</a>
-            <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Android-v0.2.5.76744-release-signed.apk" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
+            <a id="cfg-webapp-open" href="#" target="_blank" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--gold); color:#fff;">Open Full Screen</a>
+            <a id="cfg-dl-hero-apk" href="#" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
         </div>
         <!-- YouTube lightbox — Missa Lecta 2013 -->
         <!-- YouTube thumbnail trigger -->
         <div class="mt-6 mb-2 text-center">
           <div onclick="openYTLightbox()" style="display:inline-block;position:relative;cursor:pointer;border-radius:10px;overflow:hidden;box-shadow:0 6px 32px rgba(0,0,0,0.5);max-width:480px;width:100%;" onmouseover="this.querySelector('.yt-play-btn').style.transform='scale(1.12)'" onmouseout="this.querySelector('.yt-play-btn').style.transform='scale(1)'">
-            <img src="https://img.youtube.com/vi/qWvaGBiEl9I/hqdefault.jpg"
+            <img id="cfg-yt-thumb" src="about:blank"
                  alt="Robin serves the Missa Lecta, 2013"
                  style="width:100%;display:block;border-radius:10px;" />
             <!-- dark overlay -->
@@ -490,9 +568,17 @@
           </div>
         </div>
         <script>
+        function scrollToApp(e) {
+          if (e) e.preventDefault();
+          var el = document.getElementById('app-showcase');
+          if (!el) return;
+          var navH = document.getElementById('navbar').offsetHeight || 64;
+          var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
         function openYTLightbox() {
           var lb = document.getElementById('yt-lightbox');
-          document.getElementById('yt-iframe').src = 'https://www.youtube.com/embed/qWvaGBiEl9I?autoplay=1';
+          document.getElementById('yt-iframe').src = 'https://www.youtube.com/embed/' + SITE_CONFIG.youtubeVideoId + '?autoplay=1&start=' + SITE_CONFIG.youtubeStartSec;
           lb.style.display = 'flex';
           document.body.style.overflow = 'hidden';
         }
@@ -934,7 +1020,7 @@
 <section id="downloads" class="section" style="background:var(--bg-card-alt);">
     <div class="max-w-6xl mx-auto">
         <h2 class="section-title fade-in" data-editable>Download Alpha Release</h2>
-        <p class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v2.17.76952</strong> &mdash; 27 March 2026.</p>
+        <p id="cfg-version-downloads" class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v2.17.76952</strong> &mdash; 27 March 2026.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
             <!-- Android APK — PRIMARY -->
@@ -943,7 +1029,7 @@
                 <div class="text-3xl mb-3">&#128241;</div>
                 <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Android APK</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; Min Android 7.0</p>
-                <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Android-v2.16-release-signed.apk" class="dl-btn" style="background:var(--crimson); color:#fff;">Download APK</a>
+                <a id="cfg-dl-apk" href="#" class="dl-btn" style="background:var(--crimson); color:#fff;">Download APK</a>
                 <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
                 <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
                     <p style="line-height:1.6;">Open this page on your Android device, tap <strong>Download APK</strong>, then tap the downloaded file to install. If prompted, allow installation from your browser under <em>Settings &rarr; Install unknown apps</em>.</p>
@@ -956,7 +1042,7 @@
                 <div class="text-3xl mb-3">&#128187;</div>
                 <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Windows App</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x64 &middot; NSIS installer</p>
-                <a href="https://sanctissimissa.online/downloads/SanctissiMissa-Windows-v2.14-build76944-x64.exe" class="dl-btn" style="background:var(--gold); color:#fff;">Download .EXE</a>
+                <a id="cfg-dl-exe" href="#" class="dl-btn" style="background:var(--gold); color:#fff;">Download .EXE</a>
                 <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
                 <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
                     <p style="line-height:1.6;">Download the .exe and run it directly. No installation required. If Windows SmartScreen appears, click "More info" and then "Run anyway".</p>
@@ -968,7 +1054,7 @@
                 <div class="text-3xl mb-3">&#127760;</div>
                 <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Web App</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Try it in your browser</p>
-                <a href="https://sanctissimissa-app.robin.mba" class="dl-btn" style="background:var(--gold); color:#fff;" target="_blank">Launch Web App</a>
+                <a id="cfg-webapp-launch" href="#" class="dl-btn" style="background:var(--gold); color:#fff;" target="_blank">Launch Web App</a>
             </div>
 
             <!-- AppImage -->
@@ -976,13 +1062,10 @@
                 <div class="text-3xl mb-3">&#128187;</div>
                 <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux AppImage</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; x86_64</p>
-                <a href="https://sanctissimissa.online/downloads/SanctissiMissa_0.2.14_amd64.AppImage" class="dl-btn" style="background:var(--gold); color:#fff;">Download AppImage</a>
+                <a id="cfg-dl-appimage" href="#" class="dl-btn" style="background:var(--gold); color:#fff;">Download AppImage</a>
                 <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
                 <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
-                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
-                        chmod +x SanctissiMissa_0.2.14_amd64.AppImage<br>
-                        ./SanctissiMissa_0.2.14_amd64.AppImage
-                    </code>
+                    <code id="cfg-install-appimage" style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;"></code>
                 </div>
             </div>
 
@@ -991,14 +1074,10 @@
                 <div class="text-3xl mb-3">&#128230;</div>
                 <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Linux DEB</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Debian/Ubuntu &middot; x86_64</p>
-                <a href="https://sanctissimissa.online/downloads/SanctissiMissa_0.2.14_amd64.deb" class="dl-btn" style="background:var(--gold); color:#fff;">Download DEB</a>
+                <a id="cfg-dl-deb" href="#" class="dl-btn" style="background:var(--gold); color:#fff;">Download DEB</a>
                 <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
                 <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
-                    <code style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;">
-                        sudo dpkg -i SanctissiMissa_0.2.14_amd64.deb<br>
-                        sudo apt-get install -f  # Fix dependencies if needed<br>
-                        sanctissimissa
-                    </code>
+                    <code id="cfg-install-deb" style="display:block; background:var(--code-bg); color:var(--code-text); padding:0.5rem; border-radius:0.25rem; font-size:0.75rem;"></code>
                 </div>
             </div>
         </div>
@@ -1006,14 +1085,13 @@
         <!-- SHA256 Checksums -->
         <div class="ornate p-4 fade-in" style="border-radius:0.5rem;">
             <h4 class="font-display font-bold mb-3" style="color:var(--gold);">SHA256 Checksums</h4>
-            <div class="code-block" style="font-size:0.72rem; line-height:1.8;">
-                <span class="comment"># Verify your download:</span><br>
-                <span style="color:#A6E3A1;">0c865dfd841de7bf6e2dfa7f569d80081a7f0e2a44bb7446c3bff06288d84c5f</span>..  SanctissiMissa-Windows-v2.14-build76944-x64.exe<br>
+            <div id="cfg-checksums" class="code-block" style="font-size:0.72rem; line-height:1.8;"></div>
+        </div>
 
-                <span style="color:#A6E3A1;">31eb2ef339b6ac8fa590f75ec60b5aedbee4a32133344d0d7ee68a0fcb07a244</span>..  SanctissiMissa-Android-v2.16-release-signed.apk<br>
-                <span style="color:#A6E3A1;">277ac9d89c255b1cd701c06dc9a31e5ae5f2ebf55e0050d95f0870d1c62f44c5</span>..  SanctissiMissa_0.2.14_amd64.AppImage<br>
-                <span style="color:#A6E3A1;">4404cedab14a3bd66c9ae20c0d8a3938a6c08b129965db66a521f538bb6b2fc2</span>..  SanctissiMissa_0.2.14_amd64.deb<br>
-            </div>
+        <!-- Changelog -->
+        <div class="ornate p-4 fade-in mt-6" style="border-radius:0.5rem;">
+            <h4 class="font-display font-bold mb-3" style="color:var(--gold);">Changelog</h4>
+            <div id="cfg-changelog" style="font-size:0.85rem; color:var(--text-muted);"></div>
         </div>
     </div>
 </section>
@@ -1183,9 +1261,9 @@
     <p class="text-xs" style="color:var(--text-light);">
         <a href="https://github.com/rebots-online/HelloWord" target="_blank" style="color:var(--gold);">GitHub</a>
         <span class="mx-2">&middot;</span>
-        v2.17.76952
+        <span id="cfg-version-footer">v2.17.76952</span>
         <span class="mx-2">&middot;</span>
-        Liturgical texts derived from <a href="https://github.com/DivinumOfficium/divinum-officium" target="_blank" style="color:var(--gold);">DivinumOfficium</a> (MIT License)
+        <a href="/privacy-policy.html" target="_blank" style="color:var(--gold);">Privacy Policy</a>
     </p>
 </footer>
 
@@ -1209,22 +1287,99 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
+    // ===== SITE_CONFIG POPULATION =====
+    var C = SITE_CONFIG;
+    var vFull = 'v' + C.version + '.' + C.build;
+    var vDisplay = 'v' + C.version + ' \u00b7 Build ' + C.build;
+    var dlBase = C.downloadBaseUrl + '/';
+
+    // Version badges
+    var heroV = document.getElementById('cfg-version-hero');
+    if (heroV) heroV.textContent = vDisplay;
+    var dlV = document.getElementById('cfg-version-downloads');
+    if (dlV) dlV.innerHTML = 'Offline-first mobile app with complete bilingual Mass texts. Version <strong>' + vFull + '</strong> &mdash; ' + C.releaseDate + '.';
+    var footV = document.getElementById('cfg-version-footer');
+    if (footV) footV.textContent = vFull;
+
+    // Web app URLs
+    var showcase = document.getElementById('showcase-iframe');
+    if (showcase) { showcase.src = C.webAppUrl; showcase.setAttribute('data-src', C.webAppUrl); }
+    var waOpen = document.getElementById('cfg-webapp-open');
+    if (waOpen) waOpen.href = C.webAppUrl;
+    var waLaunch = document.getElementById('cfg-webapp-launch');
+    if (waLaunch) waLaunch.href = C.webAppUrl;
+
+    // Download links
+    var dlMap = { 'cfg-dl-hero-apk': 'apk', 'cfg-dl-apk': 'apk', 'cfg-dl-exe': 'exe', 'cfg-dl-appimage': 'appimage', 'cfg-dl-deb': 'deb' };
+    Object.keys(dlMap).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.href = dlBase + C.artifacts[dlMap[id]].file;
+    });
+
+    // YouTube thumbnail
+    var ytThumb = document.getElementById('cfg-yt-thumb');
+    if (ytThumb) ytThumb.src = 'https://img.youtube.com/vi/' + C.youtubeVideoId + '/hqdefault.jpg';
+
+    // Install instructions (AppImage)
+    var instAI = document.getElementById('cfg-install-appimage');
+    if (instAI) instAI.innerHTML = 'chmod +x ' + C.artifacts.appimage.file + '<br>./' + C.artifacts.appimage.file;
+
+    // Install instructions (DEB)
+    var instDeb = document.getElementById('cfg-install-deb');
+    if (instDeb) instDeb.innerHTML = 'sudo dpkg -i ' + C.artifacts.deb.file + '<br>sudo apt-get install -f  # Fix dependencies if needed<br>sanctissimissa';
+
+    // SHA256 Checksums — each entry: hash on own line (non-wrapping, scrollable), filename below
+    var csEl = document.getElementById('cfg-checksums');
+    if (csEl) {
+        var csHtml = '<span class="comment"># Verify your download — click a hash to select it:</span>';
+        ['exe', 'apk', 'appimage', 'deb'].forEach(function(k) {
+            var a = C.artifacts[k];
+            csHtml += '<div style="margin:0.6rem 0 0.2rem;white-space:nowrap;overflow-x:auto;cursor:pointer;" onclick="var r=document.createRange();r.selectNodeContents(this.querySelector(\'.sha\'));window.getSelection().removeAllRanges();window.getSelection().addRange(r);">';
+            csHtml += '<span class="sha" style="color:#A6E3A1;user-select:all;">' + a.sha256 + '</span>';
+            csHtml += '</div>';
+            csHtml += '<div style="font-size:0.68rem;margin-bottom:0.4rem;">  \u2514\u2500 <a href="' + dlBase + a.file + '" style="color:var(--gold);text-decoration:underline;">' + a.file + '</a></div>';
+        });
+        csEl.innerHTML = csHtml;
+    }
+
+    // Changelog
+    var clEl = document.getElementById('cfg-changelog');
+    if (clEl && C.changelog.length) {
+        var clHtml = '';
+        C.changelog.forEach(function(entry) {
+            clHtml += '<div class="mb-4">';
+            clHtml += '<p class="font-display font-bold" style="color:var(--crimson);">v' + entry.version + ' Build ' + entry.build + ' &mdash; ' + entry.date + '</p>';
+            clHtml += '<ul class="mt-1" style="list-style:disc; padding-left:1.2rem;">';
+            entry.notes.forEach(function(n) { clHtml += '<li>' + n + '</li>'; });
+            clHtml += '</ul></div>';
+        });
+        clEl.innerHTML = clHtml;
+    }
+
     // ===== THEME =====
     var html = document.documentElement;
     var themeBtn = document.getElementById('themeToggle');
     var themeIcon = document.getElementById('themeIcon');
+    var themeBtnCompact = document.getElementById('themeToggleCompact');
+    var themeIconCompact = document.getElementById('themeIconCompact');
 
+    function syncThemeIcons(t) {
+        var icon = t === 'dark' ? '&#9728;' : '&#9790;';
+        if (themeIcon) themeIcon.innerHTML = icon;
+        if (themeIconCompact) themeIconCompact.innerHTML = icon;
+    }
     function setTheme(t) {
         html.setAttribute('data-theme', t);
         localStorage.setItem('sm_theme', t);
-        themeIcon.innerHTML = t === 'dark' ? '&#9728;' : '&#9790;';
+        syncThemeIcons(t);
     }
     window.toggleTheme = function() {
         setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     };
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
-    // Initialize icon
-    themeIcon.innerHTML = html.getAttribute('data-theme') === 'dark' ? '&#9728;' : '&#9790;';
+    if (themeBtnCompact) themeBtnCompact.addEventListener('click', toggleTheme);
+    // Initialize icons
+    syncThemeIcons(html.getAttribute('data-theme'));
 
     // ===== MOBILE MENU =====
     var hamburger = document.getElementById('hamburger');

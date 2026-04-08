@@ -26,7 +26,7 @@ cd /home/sites/15b/9/9460530f84/sanctissimissa.online/
 
 ### Important Notes
 
-⚠️ **rsync NOT available** - StackCP only supports SFTP/SCP, not rsync
+✅ **rsync available** - rsync over SSH is supported and is the recommended deploy method (confirmed 2026-04-08)
 
 ⚠️ **SSHFS mount** - Mounted locally at `./SANCTISSIMISSA.ONLINE/` for convenience
 
@@ -38,9 +38,11 @@ sanctissimissa.online/
 ├── status.html                   # Status page
 ├── robin-poet.jpg               # Image asset
 ├── Sanctissimissa-Infographic-18mar2026.png
-├── downloads/                    # Downloadable files
-│   ├── SanctissiMissa-Windows-v0.1.1-alpha.73029-build73031-x64.exe
-│   └── sanctissimissa-android-apk-universal-release-v0.1.1-alpha.73016-signed.apk
+├── downloads/                    # Downloadable artifacts (see CROSS-REPO-CONTRACTS.md)
+│   ├── SanctissiMissa-Android-v2.33-release-signed.apk
+│   ├── SanctissiMissa-Windows-v2.33-build92878-x64.exe
+│   ├── SanctissiMissa_0.2.33_amd64.AppImage
+│   └── SanctissiMissa_0.2.33_amd64.deb
 └── Technical-HowItWorks/         # Technical docs
     ├── Hello,_Word__A_Sacred_App.mp4
     ├── The_Architecture_Upgrade__SanctissiMissa.mp4
@@ -50,30 +52,24 @@ sanctissimissa.online/
 
 ### Deployment to StackCP
 
-#### Method 1: SFTP (Recommended)
+#### Method 1: rsync (Recommended)
 
 ```bash
-# Using the deployment script
+# Using the deployment script (handles excludes, --delete, etc.)
 ./infrastructure/deployment/deploy-to-stackcp.sh
 
-# Or manually via sftp
-sftp rochemedia.ca@ssh.gb.stackcp.com << 'EOF'
-cd /home/sites/15b/9/9460530f84/sanctissimissa.online
-put index.html
-put status.html
-put -r downloads
-put -r Technical-HowItWorks
-EOF
+# Or manually
+rsync -avz --delete \
+    --exclude '.git' --exclude 'infrastructure' --exclude 'domains' \
+    --exclude 'DOCS' --exclude '*.log' --exclude 'node_modules' \
+    ./ rochemedia.ca@ssh.gb.stackcp.com:/home/sites/15b/9/9460530f84/sanctissimissa.online/
 ```
 
-#### Method 2: SCP
+#### Method 2: SCP (single files)
 
 ```bash
-# Upload single file
 scp index.html rochemedia.ca@ssh.gb.stackcp.com:/home/sites/15b/9/9460530f84/sanctissimissa.online/
-
-# Upload directory
-scp -r Technical-HowItWorks rochemedia.ca@ssh.gb.stackcp.com:/home/sites/15b/9/9460530f84/sanctissimissa.online/
+scp -r downloads/ rochemedia.ca@ssh.gb.stackcp.com:/home/sites/15b/9/9460530f84/sanctissimissa.online/
 ```
 
 #### Method 3: SSHFS Mount + Copy
@@ -155,7 +151,7 @@ sftp rochemedia.ca@ssh.gb.stackcp.com:/home/sites/15b/9/9460530f84/sanctissimiss
 ### To Restore from Git Repo
 
 1. Clone this repo
-2. Upload content via SFTP/SCP to StackCP:
+2. Deploy via rsync:
    ```bash
-   scp -r ./*.html ./downloads ./Technical-HowItWorks rochemedia.ca@ssh.gb.stackcp.com:/home/sites/15b/9/9460530f84/sanctissimissa.online/
+   ./infrastructure/deployment/deploy-to-stackcp.sh
    ```

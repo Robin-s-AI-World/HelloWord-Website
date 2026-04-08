@@ -152,11 +152,13 @@ cd HelloWord-Website
 
 **Certificate Locations on 192.168.0.126:**
 
-| Certificate | Server Path | Domains |
-|-------------|-------------|---------|
-| Primary Wildcard | `/etc/nginx/ssl/fullchain1/` | Primary domains |
-| *.robin.mba | `/etc/nginx/ssl/*.robin.mba_robin.mba_P256/` | All robin.mba subdomains |
-| *.mba2003.biz | `/etc/nginx/ssl/*.mba2003.biz_mba2003.biz_P256/` | mba2003.biz subdomains |
+| Certificate | Server Path | CN | Expires | Used by |
+|-------------|-------------|----|---------|---------|
+| Primary wildcard | `/etc/nginx/ssl/fullchain1/` | `*.cloud59.ca` | 2026-04-14 (auto-renews) | `helloword.robin.mba` |
+| `*.robin.mba` | `/etc/nginx/ssl/*.robin.mba_robin.mba_P256/` | `*.robin.mba` | 2026-07-02 (auto-renews) | All robin.mba subdomains |
+| `*.mba2003.biz` | `/etc/nginx/ssl/*.mba2003.biz_mba2003.biz_P256/` | `*.mba2003.biz` | 2026-07-02 (auto-renews) | mba2003.biz subdomains |
+
+All certs auto-renew via nginx-ui / acme.sh. See `DOCS/ARCHITECTURE/hosting-infrastructure.md` for full details.
 
 **Files in each certificate directory:**
 - `fullchain.cer` - Full certificate chain
@@ -269,9 +271,11 @@ SanctissiMissa/
 - `icons/apple-touch-icon.png` - iOS (180x180)
 - `icons/icon-192x192.png` - Android
 
-### Download Files
-- `sanctissimissa-android-apk-universal-release-v{VERSION}-signed.apk`
-- `SanctissiMissa-Windows-v{VERSION}-build{BUILD}-x64.exe`
+### Download Files (v2.33 naming — see DOCS/CROSS-REPO-CONTRACTS.md)
+- `SanctissiMissa-Android-v{VER}-release-signed.apk` (`{VER}` = major.minor, e.g. `2.33`)
+- `SanctissiMissa-Windows-v{VER}-build{BUILD}-x64.exe`
+- `SanctissiMissa_{TAURIVER}_amd64.AppImage` (`{TAURIVER}` = full semver, e.g. `0.2.33`)
+- `SanctissiMissa_{TAURIVER}_amd64.deb`
 
 ### Nginx Configs
 - `{domain}.conf` - Domain-specific
@@ -360,6 +364,8 @@ See [infrastructure/nginx-ui/CREDENTIALS.md](infrastructure/nginx-ui/CREDENTIALS
 
 ## Related Documentation
 
+- [DOCS/ARCHITECTURE/hosting-infrastructure.md](DOCS/ARCHITECTURE/hosting-infrastructure.md) - **Full hosting architecture, folder structure, SSL certs & expiries, deploy runbook**
+- [DOCS/CROSS-REPO-CONTRACTS.md](DOCS/CROSS-REPO-CONTRACTS.md) - Inter-repo version coordination (HelloWord ↔ HelloWord-Website)
 - [infrastructure/SERVER.md](infrastructure/SERVER.md) - Server overview
 - [infrastructure/shared-hosting/STACKCP.md](infrastructure/shared-hosting/STACKCP.md) - StackCP config
 - [infrastructure/nginx-ui/NGINX-UI-SYNC.md](infrastructure/nginx-ui/NGINX-UI-SYNC.md) - Nginx-UI sync strategy
@@ -376,4 +382,4 @@ See [infrastructure/nginx-ui/CREDENTIALS.md](infrastructure/nginx-ui/CREDENTIALS
 
 ---
 
-*Last updated: 2026-03-26*
+*Last updated: 2026-04-08*
