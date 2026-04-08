@@ -10,7 +10,8 @@ infrastructure/nginx/ssl/
 
 # Secrets and credentials
 .env
-.env.*
+.env.local
+.env.*.local
 *.secret
 *_password*
 credentials.json
