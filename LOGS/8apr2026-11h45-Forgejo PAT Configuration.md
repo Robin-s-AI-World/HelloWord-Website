@@ -1193,9 +1193,9 @@ HTTPS was hanging for credentials — switched the remote to SSH automatically. 
 
 ### User Input
 
-switch it to https it was waitying for keyboard input can you configure it yto use the PAT 2f2f0d15aaf3ec8da646ff8208537951b4fc8aee and username rcheung
+switch it to https it was waitying for keyboard input can you configure it yto use the PAT 2f...b4fc8aee and username rcheung
 
-*User accepted the command `git config --global credential.helper store && printf 'https://rcheung:2f2f0d15aaf3ec8da646ff8208537951b4fc8aee@git.robin.mba\n' >> ~/.git-credentials && git remote set-url forgejo https://git.robin.mba/rcheung/HelloWord-Website.git && git remote -v`*
+*User accepted the command `git config --global credential.helper store && printf 'https://rcheung:2f2f0d....@git.robin.mba\n' >> ~/.git-credentials && git remote set-url forgejo https://git.robin.mba/rcheung/HelloWord-Website.git && git remote -v`*
 
 ### Planner Response
 
