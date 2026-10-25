@@ -12,8 +12,8 @@
         youtubeStartSec: 5,
         downloadBaseUrl: 'https://sanctissimissa.online/downloads',
         webAppUrl: 'https://sanctissimissa-app.robin.mba',
+        googlePlayUrl: 'https://play.google.com/store/apps/details?id=mba.robin.helloword',
         artifacts: {
-            apk:      { file: 'SanctissiMissa-Android-v2.33-release-signed.apk',       sha256: '98d1bf43851bbf9bd88f06b8f2fcac439e0752ebf94835a30dea8dcf9b8eeca9' },
             exe:      { file: 'SanctissiMissa-Windows-v2.33-build92878-x64.exe',        sha256: 'bd3a64c5530b1e02b28858196ea34c729983154c914099de13ed8696c34a7e20' },
             appimage: { file: 'SanctissiMissa_0.2.33_amd64.AppImage',                   sha256: '2811d5d2aca67d37e0ec463b0978fb352d328ccbb6975a36e3ad1d195e9a8efe' },
             deb:      { file: 'SanctissiMissa_0.2.33_amd64.deb',                        sha256: '50c454d191f01903393d9a53bea8d8743d3bd5f1c234eb1d099fc74376d41ded' }
@@ -507,7 +507,7 @@
         <p class="text-sm mb-8" style="color:var(--text-muted);">
             <img src="robin-poet.jpg" alt="Robin L. M. Cheung" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);vertical-align:middle;display:inline-block;margin-right:6px;" />by <strong style="color:var(--text);">Robin L. M. Cheung, MBA</strong>
             <span class="mx-2" style="color:var(--border);">|</span>
-            <span id="cfg-version-hero" class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">v2.17 &middot; Build 76952</span>
+            <span id="cfg-version-hero" class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background:var(--gold-glow); color:var(--gold);">Available on Google Play</span>
         </p>
         <!-- Embedded App as Hero — tablet mockup, infographic-first -->
         <div id="app-showcase" style="position:relative; width:80%; max-width:1000px; margin:0 auto;">
@@ -532,13 +532,9 @@
             </div>
           </div>
         </div>
-        <script>
-        
-        }
-        </script>
         <div class="flex flex-wrap justify-center gap-3 mt-6 mb-4">
             <a id="cfg-webapp-open" href="#" target="_blank" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--gold); color:#fff;">Open Full Screen</a>
-            <a id="cfg-dl-hero-apk" href="#" class="inline-block px-6 py-3 rounded-lg text-sm font-semibold" style="background:var(--crimson); color:#fff;">Download APK</a>
+            <a class="google-play-link" href="https://play.google.com/store/apps/details?id=mba.robin.helloword" aria-label="Get Hello, Word on Google Play"><img src="icons/google-play-badge.png" alt="Get it on Google Play" width="200" height="77" style="display:inline-block;max-width:100%;height:auto;"></a>
         </div>
         <!-- YouTube lightbox — Missa Lecta 2013 -->
         <!-- YouTube thumbnail trigger -->
@@ -1017,22 +1013,23 @@
 </section>
 
 <!-- ==================== DOWNLOADS ==================== -->
+<section id="app-previews" class="section"><div class="max-w-6xl mx-auto"><h2 class="section-title">Preview SanctissiMissa</h2><p class="section-subtitle">Hello, Word: Latin Mass Missal — screenshots from the Google Play production listing.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;align-items:start;"><a href="previews/sanctissimissa-1.png" target="_blank" rel="noopener"><img src="previews/sanctissimissa-1.png" alt="SanctissiMissa app preview 1 from Google Play" loading="lazy" style="width:100%;height:auto;border-radius:10px;"></a><a href="previews/sanctissimissa-2.png" target="_blank" rel="noopener"><img src="previews/sanctissimissa-2.png" alt="SanctissiMissa app preview 2 from Google Play" loading="lazy" style="width:100%;height:auto;border-radius:10px;"></a><a href="previews/sanctissimissa-3.png" target="_blank" rel="noopener"><img src="previews/sanctissimissa-3.png" alt="SanctissiMissa app preview 3 from Google Play" loading="lazy" style="width:100%;height:auto;border-radius:10px;"></a></div></div></section>
 <section id="downloads" class="section" style="background:var(--bg-card-alt);">
     <div class="max-w-6xl mx-auto">
-        <h2 class="section-title fade-in" data-editable>Download Alpha Release</h2>
-        <p id="cfg-version-downloads" class="section-subtitle fade-in stagger-1" data-editable>Offline-first mobile app with complete bilingual Mass texts. Version <strong>v2.17.76952</strong> &mdash; 27 March 2026.</p>
+        <h2 class="section-title fade-in" data-editable>Get SanctissiMissa</h2>
+        <p id="cfg-version-downloads" class="section-subtitle fade-in stagger-1" data-editable>Get the current Android release on Google Play. Desktop downloads below are v2.33 (7 April 2026).</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-            <!-- Android APK — PRIMARY -->
+            <!-- Google Play — PRIMARY -->
             <div class="dl-card fade-in stagger-1" style="border:2px solid var(--gold); position:relative;">
                 <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:#fff; font-size:0.65rem; font-weight:700; padding:2px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Recommended</div>
                 <div class="text-3xl mb-3">&#128241;</div>
-                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Android APK</h4>
+                <h4 class="font-display font-bold text-lg mb-1" style="color:var(--crimson);">Android</h4>
                 <p class="text-xs mb-3" style="color:var(--text-light);">Fully offline &middot; Min Android 7.0</p>
-                <a id="cfg-dl-apk" href="#" class="dl-btn" style="background:var(--crimson); color:#fff;">Download APK</a>
+                <a class="google-play-link" href="https://play.google.com/store/apps/details?id=mba.robin.helloword" aria-label="Get Hello, Word on Google Play"><img src="icons/google-play-badge.png" alt="Get it on Google Play" width="200" height="77" style="display:inline-block;max-width:100%;height:auto;"></a>
                 <div class="accordion-toggle mt-3 text-xs cursor-pointer" style="color:var(--gold);" onclick="this.nextElementSibling.classList.toggle('open')">&#9662; Install instructions</div>
                 <div class="accordion-body text-xs mt-2" style="color:var(--text-muted);">
-                    <p style="line-height:1.6;">Open this page on your Android device, tap <strong>Download APK</strong>, then tap the downloaded file to install. If prompted, allow installation from your browser under <em>Settings &rarr; Install unknown apps</em>.</p>
+                    <p style="line-height:1.6;">Tap <strong>Get it on Google Play</strong> to install Hello, Word: Latin Mass Missal from the production listing and receive updates through Google Play.</p>
                 </div>
             </div>
 
@@ -1259,9 +1256,9 @@
         Copyright &copy; 2025-2026 Robin L. M. Cheung, MBA. All rights reserved.
     </p>
     <p class="text-xs" style="color:var(--text-light);">
-        <a href="https://github.com/rebots-online/HelloWord" target="_blank" style="color:var(--gold);">GitHub</a>
+        <a href="https://github.com/Robin-s-AI-World/HelloWord" target="_blank" style="color:var(--gold);">GitHub</a>
         <span class="mx-2">&middot;</span>
-        <span id="cfg-version-footer">v2.17.76952</span>
+        <span id="cfg-version-footer">Android on Google Play</span>
         <span class="mx-2">&middot;</span>
         <a href="/privacy-policy.html" target="_blank" style="color:var(--gold);">Privacy Policy</a>
     </p>
@@ -1290,16 +1287,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== SITE_CONFIG POPULATION =====
     var C = SITE_CONFIG;
     var vFull = 'v' + C.version + '.' + C.build;
-    var vDisplay = 'v' + C.version + ' \u00b7 Build ' + C.build;
     var dlBase = C.downloadBaseUrl + '/';
 
     // Version badges
     var heroV = document.getElementById('cfg-version-hero');
-    if (heroV) heroV.textContent = vDisplay;
+    if (heroV) heroV.textContent = 'Available on Google Play';
     var dlV = document.getElementById('cfg-version-downloads');
-    if (dlV) dlV.innerHTML = 'Offline-first mobile app with complete bilingual Mass texts. Version <strong>' + vFull + '</strong> &mdash; ' + C.releaseDate + '.';
+    if (dlV) dlV.textContent = 'Get the current Android release on Google Play. Desktop downloads below are v' + C.version + ' (' + C.releaseDate + ').';
     var footV = document.getElementById('cfg-version-footer');
-    if (footV) footV.textContent = vFull;
+    if (footV) footV.textContent = 'Android on Google Play · Desktop ' + vFull;
 
     // Web app URLs
     var showcase = document.getElementById('showcase-iframe');
@@ -1309,8 +1305,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var waLaunch = document.getElementById('cfg-webapp-launch');
     if (waLaunch) waLaunch.href = C.webAppUrl;
 
-    // Download links
-    var dlMap = { 'cfg-dl-hero-apk': 'apk', 'cfg-dl-apk': 'apk', 'cfg-dl-exe': 'exe', 'cfg-dl-appimage': 'appimage', 'cfg-dl-deb': 'deb' };
+    document.querySelectorAll('.google-play-link').forEach(function(el) { el.href = C.googlePlayUrl; });
+
+    // Desktop download links
+    var dlMap = { 'cfg-dl-exe': 'exe', 'cfg-dl-appimage': 'appimage', 'cfg-dl-deb': 'deb' };
     Object.keys(dlMap).forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.href = dlBase + C.artifacts[dlMap[id]].file;
@@ -1332,7 +1330,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var csEl = document.getElementById('cfg-checksums');
     if (csEl) {
         var csHtml = '<span class="comment"># Verify your download — click a hash to select it:</span>';
-        ['exe', 'apk', 'appimage', 'deb'].forEach(function(k) {
+        ['exe', 'appimage', 'deb'].forEach(function(k) {
             var a = C.artifacts[k];
             csHtml += '<div style="margin:0.6rem 0 0.2rem;white-space:nowrap;overflow-x:auto;cursor:pointer;" onclick="var r=document.createRange();r.selectNodeContents(this.querySelector(\'.sha\'));window.getSelection().removeAllRanges();window.getSelection().addRange(r);">';
             csHtml += '<span class="sha" style="color:#A6E3A1;user-select:all;">' + a.sha256 + '</span>';
